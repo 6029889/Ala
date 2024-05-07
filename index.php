@@ -3,7 +3,6 @@ include 'connect.php';
 
 session_start();
 
-// Check if the login form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $gebruikersnaam = $_POST['gebruikersnaam'];
     $wachtwoord = $_POST['wachtwoord'];
