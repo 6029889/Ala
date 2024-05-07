@@ -38,7 +38,7 @@ if (isset($_SESSION['KlantNr'])) {
     echo "<p>Hier is de inhoud van de startpagina voor ingelogde gebruikers.</p>";
     echo "<a href='logout.php'>Uitloggen</a>";
 } else {
-    
+
     ?>
     <!DOCTYPE html>
     <html lang="nl">
@@ -64,6 +64,8 @@ if (isset($_SESSION['KlantNr'])) {
         </form>
     </body>
     </html>
+
+    <h1>POEPOEWPRORWPO</h1>
     <?php
 }
 ?>
