@@ -46,23 +46,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inloggen</title>
+    <title>Log in</title>
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-    <?php if (isset($loginError)) { ?>
-        <p><?php echo $loginError; ?></p>
-    <?php } ?>
-
-    <h1>Inloggen</h1>
+  <div class="container">
+    <header>
+      <div class="header-left">
+          <img src="images/HOBO_logo.png" alt="">
+      </div>
+      <div class="header-right">
+          <h2>Sign up</h2>
+      </div>
+    </header>
+    
+    <h1>Log In</h1>
     <form method="post" action="">
-        <label for="gebruikersnaam">Gebruikersnaam (E-mail):</label>
+        <label for="gebruikersnaam">Username (E-mail):</label>
         <input type="text" name="gebruikersnaam" id="gebruikersnaam" required><br>
 
-        <label for="wachtwoord">Wachtwoord:</label>
+        <label for="wachtwoord">Password:</label>
         <input type="password" name="wachtwoord" id="wachtwoord" required><br>
 
-        <input type="submit" name="login" value="Inloggen">
+        <input type="submit" name="login" value="Log In">
     </form>
+  </div>
 </body>
 </html>
 <?php endif; ?>
