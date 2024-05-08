@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     
     <h1>Log In</h1>
     <form method="post" action="">
-        <label for="gebruikersnaam">Username (E-mail):</label>
+        <label for="gebruikersnaam">Email:</label>
         <input type="text" name="gebruikersnaam" id="gebruikersnaam" required><br>
 
         <label for="wachtwoord">Password:</label>
