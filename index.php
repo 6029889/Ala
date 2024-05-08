@@ -40,6 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <a href="logout.php">Uitloggen</a>
 </body>
 </html>
+
+
+ <!-- Dit is de hoofdpagina niet ingelogd. -->
 <?php else: ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -49,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <title>Log in</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
-<body>
+<body class="bodyinlog">
   <div class="container">
     <header>
       <div class="header-left">
@@ -59,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
           <h2>Sign up</h2>
       </div>
     </header>
-    
+    <div>
     <h1>Log In</h1>
     <form method="post" action="">
         <label for="gebruikersnaam">Email:</label>
@@ -71,6 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <input type="submit" name="login" value="Log In">
     </form>
   </div>
-</body>
+  </body>
 </html>
 <?php endif; ?>
