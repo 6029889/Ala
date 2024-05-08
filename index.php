@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
           <img src="images/HOBO_logo.png" alt="">
       </div>
       <div class="header-right">
-          <h2>Sign up</h2>
+          <button>Sign up</button>
       </div>
     </header>
     <div>
