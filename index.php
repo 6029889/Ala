@@ -35,9 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <title>Welkom op de startpagina</title>
 </head>
 <body>
-    <h1>Welkom op de startpagina</h1>
-    <p>Hier is de inhoud van de startpagina voor ingelogde gebruikers.</p>
-    <a href="logout.php">Uitloggen</a>
+<header>
+      <div class="header-left">
+          <img src="images/HOBO_logo.png" alt="">
+      </div>
+      <div class="header-right">
+        <a href="logout.php" class="logout-link">Uitloggen</a>
+      </div>
+</header>
 </body>
 </html>
 
