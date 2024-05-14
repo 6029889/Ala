@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <header>
       <div class="header-left">
           <img src="images/HOBO_logo.png" alt="">
-
           <a href="index.php" class="home">Home</a>
       </div>
       <div class="header-right">
@@ -82,6 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <input type="submit" name="login" value="Log In">
     </form>
   </div>
-  </body>
+</body>
 </html>
 <?php endif; ?>
