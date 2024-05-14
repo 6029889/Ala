@@ -15,18 +15,16 @@
   }
 
   header {
-    position: absolute;
-    top: 20px;
     display: flex;
     justify-content: space-between;
-    width: 95%;
+    align-items: center;
+    width: 100%;
     padding: 0 20px;
     box-sizing: border-box;
-    z-index: 1;
   }
 
   .header-left img {
-    max-width: 150px;
+    max-width: 200px;
     height: auto;
   }
 
@@ -88,7 +86,7 @@
 /* begin hoofdscherm style */
 .logout-link {
   display: inline-block;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
   background-color: #92d051;
@@ -100,5 +98,25 @@
 }
 
 .logout-link:hover {
+  background-color: #5b9bd5;
+}
+/* .search{
+  max-width: 150px;
+  height: auto;
+} */
+.home{
+  display: inline-block;
+  padding: 5px;
+  margin-left: 25px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #92d051;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.home:hover{
   background-color: #5b9bd5;
 }

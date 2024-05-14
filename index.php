@@ -38,8 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <header>
       <div class="header-left">
           <img src="images/HOBO_logo.png" alt="">
+          
+          <a href="index.php" class="home">Home</a>
       </div>
       <div class="header-right">
+        <!-- <img src="images/search.png" alt="" class="search"> -->
         <a href="logout.php" class="logout-link">Uitloggen</a>
       </div>
 </header>
