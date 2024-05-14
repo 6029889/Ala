@@ -58,7 +58,7 @@ function displaySeries() {
     }
 
     // Query om actieve series op te halen
-    $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1 LIMIT 4";
+    $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1 LIMIT 14";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -66,7 +66,9 @@ function displaySeries() {
         echo "<div class='series-container'>";
         while ($row = $result->fetch_assoc()) {
             echo "<div class='series-card'>";
-            $imagePath = "images/images/fotos/" . $row['SerieID'] . ".jpg";
+            // Remove leading zeros from SerieID
+            $paddedSerieID = sprintf('%05d', $row['SerieID']);
+            $imagePath = "images/images/fotos/" . $paddedSerieID . ".jpg";
             if (file_exists($imagePath)) {
                 echo "<img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
             }
