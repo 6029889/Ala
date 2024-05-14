@@ -31,18 +31,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/home.css">
     <title>Welkom op de startpagina</title>
 </head>
 <body>
 <header>
       <div class="header-left">
           <img src="images/HOBO_logo.png" alt="">
-          
+
           <a href="index.php" class="home">Home</a>
       </div>
       <div class="header-right">
-        <!-- <img src="images/search.png" alt="" class="search"> -->
+        <img src="images/search.png" alt="" class="search">
         <a href="logout.php" class="logout-link">Uitloggen</a>
       </div>
 
