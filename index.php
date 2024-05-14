@@ -68,10 +68,10 @@ function displaySeries() {
             echo "<div class='series-card'>";
             $imagePath = "images/images/fotos/" . $row['SerieID'] . ".jpg";
             if (file_exists($imagePath)) {
-                echo "<img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
+                echo "<a href='" . $row['IMDBLink'] . "' target='_blank'> <img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'></a>";
             }
             echo "<h3>" . $row['SerieTitel'] . "</h3>";
-            echo "<p><a href='" . $row['IMDBLink'] . "' target='_blank'>IMDB-pagina</a></p>";
+
             echo "</div>";
         }
         echo "</div>"; // Close series-container
