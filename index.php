@@ -44,7 +44,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <img src="images/search.png" alt="" class="search">
         <a href="logout.php" class="logout-link">Uitloggen</a>
       </div>
+
 </header>
+<div>
+<?php
+function displaySeries() {
+    // Maak verbinding met de database
+    $conn = connect_to_database();
+
+    // Controleer of de verbinding succesvol is voordat we doorgaan
+    if ($conn->connect_error) {
+        die("Kan geen verbinding maken met de database: " . $conn->connect_error);
+    }
+
+    // Query om actieve series op te halen
+    $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1";
+    $result = $conn->query($sql);
+
+
+    if ($result->num_rows > 0) {
+        // Output data van elke rij
+        while ($row = $result->fetch_assoc()) {
+            echo "<div>";
+            echo "<h3>" . $row['SerieTitel'] . "</h3>";
+            echo "<p><a href='" . $row['IMDBLink'] . "' target='_blank'>IMDB-pagina</a></p>";
+            echo "</div>";
+        }
+    } else {
+        echo "Geen series gevonden.";
+    }
+
+    // Sluit de verbinding met de database
+    $conn->close();
+}
+?>
+<?php displaySeries(); ?>
+</div>
 </body>
 </html>
 
@@ -69,6 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
           <button>Sign up</button>
       </div>
     </header>
+    
     <div>
     <h1>Log In</h1>
     <form method="post" action="">
