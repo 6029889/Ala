@@ -58,18 +58,23 @@ function displaySeries() {
     }
 
     // Query om actieve series op te halen
-    $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1";
+    $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1 LIMIT 4";
     $result = $conn->query($sql);
-
 
     if ($result->num_rows > 0) {
         // Output data van elke rij
+        echo "<div class='series-container'>";
         while ($row = $result->fetch_assoc()) {
-            echo "<div>";
+            echo "<div class='series-card'>";
+            $imagePath = "images/images/fotos/" . $row['SerieID'] . ".jpg";
+            if (file_exists($imagePath)) {
+                echo "<img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
+            }
             echo "<h3>" . $row['SerieTitel'] . "</h3>";
             echo "<p><a href='" . $row['IMDBLink'] . "' target='_blank'>IMDB-pagina</a></p>";
             echo "</div>";
         }
+        echo "</div>"; // Close series-container
     } else {
         echo "Geen series gevonden.";
     }
@@ -78,6 +83,7 @@ function displaySeries() {
     $conn->close();
 }
 ?>
+
 <?php displaySeries(); ?>
 </div>
 </body>
