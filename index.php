@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <input type="text" id="searchTerm" name="searchTerm" required>
         <button type="submit">Zoeken</button>
     </form>
-
+hallo
 </header>
 <div>
 <?php
