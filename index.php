@@ -42,19 +42,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
           <a href="index.php" class="home">Home</a>
       </div>
       <div class="header-right">
-        <img src="images/search.png" alt="" class="search">
-        <a href="logout.php" class="logout-link">Uitloggen</a>
-      </div>
       <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <label for="searchTerm">Zoekterm:</label>
-        <input type="text" id="searchTerm" name="searchTerm" required>
-        <button type="submit">Zoeken</button>
-    </form>
-hallo
+            <div class="search-container">
+                <input type="text" id="searchTerm" name="searchTerm" required>
+                <img src="images/search.png" alt="" class="search" id="searchIcon">
+            </div>
+        </form>
+        <a href="logout.php" class="logout-link">Uitloggen</a>
+    </div>
 </header>
 <div>
 <?php
-
 function displaySeries($searchTerm = "") {
     $conn = connect_to_database();
 
@@ -106,8 +104,25 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
 }
 ?>
 
-<?php displaySeries(); ?>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchIcon = document.getElementById("searchIcon");
+        const searchTermInput = document.getElementById("searchTerm");
+        let searchVisible = false;
+
+        // Toggle search input visibility on clicking the search icon
+        searchIcon.addEventListener("click", function() {
+            if (!searchVisible) {
+                searchTermInput.style.display = "inline-block";
+                searchTermInput.focus();
+            } else {
+                searchTermInput.style.display = "none";
+            }
+            searchVisible = !searchVisible;
+        });
+    });
+</script>
 </body>
 </html>
 
