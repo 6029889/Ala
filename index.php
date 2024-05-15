@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Welkom op de startpagina</title>
 </head>
 <body>
@@ -53,56 +54,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 </header>
 <div>
 <?php
-function displaySeries($searchTerm = "") {
-    $conn = connect_to_database();
+$conn = connect_to_database();
 
-    if ($conn->connect_error) {
-        die("Kan geen verbinding maken met de database: " . $conn->connect_error);
-    }
+if ($conn->connect_error) {
+    die("Kan geen verbinding maken met de database: " . $conn->connect_error);
+}
 
-    $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1";
-    if (!empty($searchTerm)) {
-        $sql .= " AND SerieTitel LIKE ?";
-    }
-    $sql .= " LIMIT 14";
+$sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1";
+if (!empty($searchTerm)) {
+    $sql .= " AND SerieTitel LIKE ?";
+}
+$sql .= " LIMIT 14";
 
-    $stmt = $conn->prepare($sql);
-    if (!empty($searchTerm)) {
-        $searchParam = '%' . $searchTerm . '%';
-        $stmt->bind_param("s", $searchParam);
-    }
-    $stmt->execute();
-    $result = $stmt->get_result();
+$stmt = $conn->prepare($sql);
+if (!empty($searchTerm)) {
+    $searchParam = '%' . $searchTerm . '%';
+    $stmt->bind_param("s", $searchParam);
+}
+$stmt->execute();
+$result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        echo "<div class='series-container'>";
-        while ($row = $result->fetch_assoc()) {
-            $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);    
-            echo "<div class='series-card'>";
-            $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
-            if (file_exists($imagePath)) {
-                echo "<a href='" . $row['IMDBLink'] . "' target='_blank'> <img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'></a>";
-            }
-            echo "<h3>" . $row['SerieTitel'] . "</h3>";
-           
-            echo "</div>";
+if ($result->num_rows > 0) {
+    echo "<div class='series-container-wrapper'>";
+    echo "<div class='series-container'>";
+    while ($row = $result->fetch_assoc()) {
+        $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);    
+        echo "<div class='series-card'>";
+        $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
+        if (file_exists($imagePath)) {
+            echo "<a href='" . $row['IMDBLink'] . "' target='_blank'> <img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'></a>";
         }
-        echo "</div>"; 
-    } else {
-        echo "Geen series gevonden.";
+        echo "<h3>" . $row['SerieTitel'] . "</h3>";
+        echo "</div>";
     }
+    echo "</div>"; 
+    echo "</div>";
 
-    $stmt->close();
-    $conn->close();
-}
+    echo "<button id='scrollLeftButton'>
+    <i class='fas fa-angle-left'></i>
+  </button>";
 
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
-    $searchTerm = $_GET['searchTerm'];
-    displaySeries($searchTerm);
+    echo "<button id='scrollRightButton'>
+    <i class='fas fa-angle-right'></i>
+  </button>";
+
 } else {
-    displaySeries();
-}
+    echo "Geen series gevonden.";
+}    
+
+$stmt->close();
+$conn->close();
 ?>
+
 
 </div>
 <script>
@@ -111,7 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
         const searchTermInput = document.getElementById("searchTerm");
         let searchVisible = false;
 
-        // Toggle search input visibility on clicking the search icon
         searchIcon.addEventListener("click", function() {
             if (!searchVisible) {
                 searchTermInput.style.display = "inline-block";
@@ -122,7 +124,34 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
             searchVisible = !searchVisible;
         });
     });
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const seriesContainers = document.querySelectorAll('.series-container');
+        seriesContainers.forEach(container => {
+            container.classList.add('scroll-container');
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const scrollRightButton = document.getElementById('scrollRightButton');
+        const scrollLeftButton = document.getElementById('scrollLeftButton');
+        const wrapper = document.querySelector('.series-container-wrapper');
+
+        scrollRightButton.addEventListener('click', function () {
+            wrapper.scrollBy({
+                left: 200,
+                behavior: 'smooth'
+            });
+        });
+
+        scrollLeftButton.addEventListener('click', function () {
+            wrapper.scrollBy({
+                left: -150,
+                behavior: 'smooth'
+            });
+        });
+    });
 </script>
+
 </body>
 </html>
 

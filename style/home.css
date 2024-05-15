@@ -1,6 +1,7 @@
   .container {
     position: relative;
-    height: 98vh;
+    height: 100%;
+    width: 100%;
     display: inline-block;
     flex-direction: column;
     justify-content: center;
@@ -94,6 +95,15 @@
   .home:hover {
     background-color: #5b9bd5;
   }
+  .series-container-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+  .series-container-wrapper::-webkit-scrollbar {
+    display: none;
+}
 
   .series-container {
     padding-top: 100px;
@@ -101,7 +111,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    margin-left: 500px;
 }
 
 .series-card {
@@ -112,6 +123,7 @@
     padding: 20px;
     margin-bottom: 20px;
     margin: 5px;
+    margin-right: 20px;
 }
 
 .series-card h3 {
@@ -134,4 +146,33 @@
 
 .series-card p a:hover {
     text-decoration: underline;
+}
+#scrollRightButton{
+  position: fixed;
+  top: 35%; 
+  right: 10px; 
+  transform: translateY(-50%); 
+  width: 30px; 
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #92d051;
+  color: white;
+}
+#scrollRightButton:hover{
+  background-color: #5b9bd5;
+} #scrollLeftButton{
+  position: fixed;
+  top: 35%; 
+  left: 10px;
+  transform: translateY(-50%);
+  width: 30px; 
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #92d051;
+  color: white;
+}
+#scrollLeftButton:hover{
+  background-color: #5b9bd5;
 }
