@@ -54,57 +54,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 </header>
 <div>
 <?php
-$conn = connect_to_database();
+function displaySeries($searchTerm = "") {
+    $conn = connect_to_database();
 
-if ($conn->connect_error) {
-    die("Kan geen verbinding maken met de database: " . $conn->connect_error);
-}
-
-$sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1";
-if (!empty($searchTerm)) {
-    $sql .= " AND SerieTitel LIKE ?";
-}
-$sql .= " LIMIT 14";
-
-$stmt = $conn->prepare($sql);
-if (!empty($searchTerm)) {
-    $searchParam = '%' . $searchTerm . '%';
-    $stmt->bind_param("s", $searchParam);
-}
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows > 0) {
-    echo "<div class='series-container-wrapper'>";
-    echo "<div class='series-container'>";
-    while ($row = $result->fetch_assoc()) {
-        $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);    
-        echo "<div class='series-card'>";
-        $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
-        if (file_exists($imagePath)) {
-            echo "<a href='" . $row['IMDBLink'] . "' target='_blank'> <img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'></a>";
-        }
-        echo "<h3>" . $row['SerieTitel'] . "</h3>";
-        echo "</div>";
+    if ($conn->connect_error) {
+        die("Kan geen verbinding maken met de database: " . $conn->connect_error);
     }
-    echo "</div>"; 
-    echo "</div>";
 
-    echo "<button id='scrollLeftButton'>
-    <i class='fas fa-angle-left'></i>
-  </button>";
+    $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1";
+    if (!empty($searchTerm)) {
+        $sql .= " AND SerieTitel LIKE ?";
+    }
+    $sql .= " LIMIT 14";
 
-    echo "<button id='scrollRightButton'>
-    <i class='fas fa-angle-right'></i>
-  </button>";
+    $stmt = $conn->prepare($sql);
+    if (!empty($searchTerm)) {
+        $searchParam = '%' . $searchTerm . '%';
+        $stmt->bind_param("s", $searchParam);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
 
+    if ($result->num_rows > 0) {
+        echo "<div class='series-container-wrapper'>";
+        echo "<div class='series-container'>";
+        while ($row = $result->fetch_assoc()) {
+            $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);    
+            echo "<div class='series-card'>";
+            $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
+            if (file_exists($imagePath)) {
+                echo "<a href='" . $row['IMDBLink'] . "' target='_blank'> <img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'></a>";
+            }
+            echo "<h3>" . $row['SerieTitel'] . "</h3>";
+            echo "</div>";
+        }
+        echo "</div>"; 
+        echo "</div>";
+
+        echo "<button id='scrollLeftButton'>
+        <i class='fas fa-angle-left'></i>
+      </button>";
+
+        echo "<button id='scrollRightButton'>
+        <i class='fas fa-angle-right'></i>
+      </button>";
+
+    } else {
+        echo "Geen series gevonden.";
+    }    
+
+    $stmt->close();
+    $conn->close();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
+    $searchTerm = $_GET['searchTerm'];
+    displaySeries($searchTerm);
 } else {
-    echo "Geen series gevonden.";
-}    
-
-$stmt->close();
-$conn->close();
+    displaySeries();
+}
 ?>
+
+
 
 </div>
 <script>
