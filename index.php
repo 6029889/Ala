@@ -100,7 +100,9 @@ function displaySeries($searchTerm = "") {
       </button>";
 
     } else {
+        echo "<div class='series-container'>";
         echo "Geen series gevonden.";
+        echo "</div>";
     }    
 
     $stmt->close();
@@ -200,3 +202,4 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
 </body>
 </html>
 <?php endif; ?>
+
