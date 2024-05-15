@@ -87,11 +87,15 @@ function displaySeries($searchTerm = "") {
            
             echo "</div>";
         }
-        echo "</div>"; 
-    } else {
+        
+       
+    } 
+    else {
+        echo "<div class='series-container'>";
         echo "Geen series gevonden.";
-    }
-
+        echo "</div>";
+    }   
+ echo "</div>"; 
     $stmt->close();
     $conn->close();
 }
