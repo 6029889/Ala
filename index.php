@@ -44,6 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <img src="images/search.png" alt="" class="search">
         <a href="logout.php" class="logout-link">Uitloggen</a>
       </div>
+      <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <label for="searchTerm">Zoekterm:</label>
+        <input type="text" id="searchTerm" name="searchTerm" required>
+        <button type="submit">Zoeken</button>
+    </form>
 
 </header>
 <div>
