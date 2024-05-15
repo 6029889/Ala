@@ -106,7 +106,6 @@ $stmt->close();
 $conn->close();
 ?>
 
-
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
