@@ -38,12 +38,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 </head>
 <body>
 <header>
-      <div class="header-left">
-          <img src="images/HOBO_logo.png" alt="">
-          <a href="index.php" class="home">Home</a>
-      </div>
-      <div class="header-right">
-      <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <div class="header-left">
+        <img src="images/HOBO_logo.png" alt="">
+        <a href="index.php" class="home">Home</a>
+    </div>
+    <div class="header-right">
+        <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <div class="search-container">
                 <input type="text" id="searchTerm" name="searchTerm" required>
                 <img src="images/search.png" alt="" class="search" id="searchIcon">
@@ -65,7 +65,7 @@ function displaySeries($searchTerm = "") {
     if (!empty($searchTerm)) {
         $sql .= " AND SerieTitel LIKE ?";
     }
-    $sql .= " LIMIT 14";
+    $sql .= " LIMIT 20";
 
     $stmt = $conn->prepare($sql);
     if (!empty($searchTerm)) {
@@ -91,14 +91,8 @@ function displaySeries($searchTerm = "") {
         echo "</div>"; 
         echo "</div>";
 
-        echo "<button id='scrollLeftButton'>
-        <i class='fas fa-angle-left'></i>
-      </button>";
-
-        echo "<button id='scrollRightButton'>
-        <i class='fas fa-angle-right'></i>
-      </button>";
-
+        echo "<button id='scrollLeftButton'><i class='fas fa-angle-left'></i></button>";
+        echo "<button id='scrollRightButton'><i class='fas fa-angle-right'></i></button>";
     } else {
         echo "<div class='series-container'>";
         echo "Geen series gevonden.";
@@ -116,9 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
     displaySeries();
 }
 ?>
-
-
-
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -135,38 +126,28 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
             }
             searchVisible = !searchVisible;
         });
-    });
 
-    window.addEventListener('DOMContentLoaded', (event) => {
-        const seriesContainers = document.querySelectorAll('.series-container');
-        seriesContainers.forEach(container => {
-            container.classList.add('scroll-container');
-        });
-    });
-    document.addEventListener('DOMContentLoaded', function () {
         const scrollRightButton = document.getElementById('scrollRightButton');
         const scrollLeftButton = document.getElementById('scrollLeftButton');
         const wrapper = document.querySelector('.series-container-wrapper');
 
         scrollRightButton.addEventListener('click', function () {
             wrapper.scrollBy({
-                left: 200,
+                left: 500,
                 behavior: 'smooth'
             });
         });
 
         scrollLeftButton.addEventListener('click', function () {
             wrapper.scrollBy({
-                left: -150,
+                left: -500,
                 behavior: 'smooth'
             });
         });
     });
 </script>
-
 </body>
 </html>
-
 <?php else: ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -177,29 +158,28 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body class="bodyinlog">
-  <div class="container">
+<div class="container">
     <header>
-      <div class="header-left">
-          <img src="images/HOBO_logo.png" alt="">
-      </div>
-      <div class="header-right">
-          <button>Sign up</button>
-      </div>
+        <div class="header-left">
+            <img src="images/HOBO_logo.png" alt="">
+        </div>
+        <div class="header-right">
+            <button>Sign up</button>
+        </div>
     </header>
-    
     <div>
-    <h1>Log In</h1>
-    <form method="post" action="">
-        <label for="gebruikersnaam">Email:</label>
-        <input type="text" name="gebruikersnaam" id="gebruikersnaam" required><br>
+        <h1>Log In</h1>
+        <form method="post" action="">
+            <label for="gebruikersnaam">Email:</label>
+            <input type="text" name="gebruikersnaam" id="gebruikersnaam" required><br>
 
-        <label for="wachtwoord">Password:</label>
-        <input type="password" name="wachtwoord" id="wachtwoord" required><br>
+            <label for="wachtwoord">Password:</label>
+            <input type="password" name="wachtwoord" id="wachtwoord" required><br>
 
-        <input type="submit" name="login" value="Log In">
-    </form>
-  </div>
+            <input type="submit" name="login" value="Log In">
+        </form>
+    </div>
+</div>
 </body>
 </html>
 <?php endif; ?>
-

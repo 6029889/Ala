@@ -96,23 +96,24 @@
     background-color: #5b9bd5;
   }
   .series-container-wrapper {
-    max-height: 400px;
-    overflow-y: auto;
+    overflow-x: auto;
+    overflow-y: hidden; /* Zorg ervoor dat alleen horizontaal wordt gescrolld */
     -ms-overflow-style: none;
     scrollbar-width: none;
+    white-space: nowrap; 
 }
   .series-container-wrapper::-webkit-scrollbar {
     display: none;
 }
 
   .series-container {
-    padding-top: 100px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  
     flex-wrap: nowrap;
-    margin-left: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Begin vanaf het begin van de container */
+    padding-top: 100px;
+    
 }
 
 .series-card {
