@@ -24,26 +24,19 @@ $actors = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/info.css">
     <title><?php echo htmlspecialchars($series['SerieTitel']); ?></title>
-    <style>
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .trailer {
-            margin: 20px 0;
-        }
-        .actors {
-            list-style-type: none;
-            padding: 0;
-        }
-        .actors li {
-            margin: 5px 0;
-        }
-    </style>
 </head>
 <body>
+<header>
+    <div class="header-left">
+        <img src="images/HOBO_logo.png" alt="">
+        <a href="index.php" class="home">Home</a>
+    </div>
+    <div class="header-right">
+        <a href="logout.php" class="logout-link">Uitloggen</a>
+    </div>
+</header>
     <div class="container">
         <h1><?php echo htmlspecialchars($series['SerieTitel']); ?></h1>
         <p><?php echo htmlspecialchars($series['SerieBeschrijving']); ?></p>
