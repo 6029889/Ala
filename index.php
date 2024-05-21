@@ -81,7 +81,7 @@ function displaySeries($searchTerm = "") {
         while ($row = $result->fetch_assoc()) {
             $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);
             $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
-            $infoPageUrl = "info.php";
+            $infoPageUrl = "info.php    ";
             echo "<a href='" . $infoPageUrl . "' class='series-card' style='text-decoration: none; color: inherit;'>";
             if (file_exists($imagePath)) {
                 echo "<img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
