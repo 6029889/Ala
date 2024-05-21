@@ -79,17 +79,19 @@ function displaySeries($searchTerm = "") {
         echo "<div class='series-container-wrapper'>";
         echo "<div class='series-container'>";
         while ($row = $result->fetch_assoc()) {
-            $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);    
-            echo "<div class='series-card'>";
+            $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);
             $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
+            $infoPageUrl = "info.php";
+            echo "<a href='" . $infoPageUrl . "' class='series-card' style='text-decoration: none; color: inherit;'>";
             if (file_exists($imagePath)) {
-                echo "<a href='" . $row['IMDBLink'] . "' target='_blank'> <img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'></a>";
+                echo "<img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
             }
             echo "<h3>" . $row['SerieTitel'] . "</h3>";
-            echo "</div>";
+            echo "</a>";
         }
         echo "</div>"; 
         echo "</div>";
+
 
         echo "<button id='scrollLeftButton'><i class='fas fa-angle-left'></i></button>";
         echo "<button id='scrollRightButton'><i class='fas fa-angle-right'></i></button>";
