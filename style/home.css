@@ -6,7 +6,7 @@ body {
   position: relative;
   height: 100%;
   width: 100%;
-  display: inline-block;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -83,10 +83,11 @@ header {
   z-index: 1;
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
+.header-left img {
+  max-width: 150px;
+  height: auto;
 }
+
 
 .header-left img {
   max-width: 150px;
@@ -95,6 +96,7 @@ header {
 }
 
 .series-container-wrapper {
+  position: relative;
   overflow-x: auto;
   overflow-y: hidden;
   -ms-overflow-style: none;
@@ -107,6 +109,7 @@ header {
 }
 
 .series-container {
+  position: relative;
   flex-wrap: nowrap;
   display: flex;
   align-items: center;
@@ -151,7 +154,7 @@ header {
 #scrollRightButton,
 #scrollLeftButton {
   position: fixed;
-  top: 35%;
+  top: 30%;
   width: 30px;
   height: 30px;
   border-radius: 5px;
@@ -168,10 +171,74 @@ header {
 
 #scrollRightButton {
   right: 10px;
-  transform: translateY(-50%);
 }
 
 #scrollLeftButton {
   left: 10px;
-  transform: translateY(-50%);
+}
+#info-container {
+  display: none;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#info-container h1 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+#info-container p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.trailer {
+  margin-bottom: 20px;
+}
+
+.actors {
+  margin-bottom: 20px;
+}
+
+.actors h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.actors ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.actors li {
+  color: #666;
+  margin: 5px 0;
+}
+
+#less-button {
+  background-color: #92d051;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+#watch-video-button{
+  background-color: #92d051;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#less-button:hover {
+  background-color: #5b9bd5;
 }

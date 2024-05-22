@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/home.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Welkom op de startpagina</title>
 </head>
@@ -77,33 +78,31 @@ function displaySeries($searchTerm = "") {
 
     if ($result->num_rows > 0) {
         echo "<div class='series-container-wrapper'>";
+        
         echo "<div class='series-container'>";
+        echo "<button id='scrollLeftButton'><i class='fas fa-angle-left'></i></button>";
         while ($row = $result->fetch_assoc()) {
             $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);
             $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
-            $infoPageUrl = "info.php    ";
-            echo "<a href='" . $infoPageUrl . "' class='series-card' style='text-decoration: none; color: inherit;'>";
+            echo "<div class='series-card' data-serie-id='" . $row['SerieID'] . "' style='text-decoration: none; color: inherit; cursor: pointer;'>";
             if (file_exists($imagePath)) {
                 echo "<img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
             }
             echo "<h3>" . $row['SerieTitel'] . "</h3>";
-            echo "</a>";
-        }
-        echo "</div>"; 
+            echo "</div>";
+        }    
         echo "</div>";
-
-
-        echo "<button id='scrollLeftButton'><i class='fas fa-angle-left'></i></button>";
-        echo "<button id='scrollRightButton'><i class='fas fa-angle-right'></i></button>";
+        echo "<button id='scrollRightButton' class='scroll-button'><i class='fas fa-angle-right'></i></button>";
+        echo "</div>";
     } else {
         echo "<div class='series-container'>";
         echo "Geen series gevonden.";
         echo "</div>";
-    }    
-
+    }
+    
     $stmt->close();
     $conn->close();
-}
+} 
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
     $searchTerm = $_GET['searchTerm'];
@@ -111,8 +110,50 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
 } else {
     displaySeries();
 }
+
+
+$series = [
+    'SerieTitel' => 'Breaking Bad',
+    'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
+    'TrailerURL' => 'https://www.youtube.com/embed/HhesaQXLuRY',
+];
+
+$actors = [
+    'Bryan Cranston',
+    'Aaron Paul',
+    'Anna Gunn',
+    'Betsy Brandt',
+    'RJ Mitte',
+    'Dean Norris',
+    'Bob Odenkirk',
+    'Jonathan Banks',
+    'Giancarlo Esposito',
+];
+
 ?>
 </div>
+
+<div id="info-container" style="display: none;">
+    <h1><?php echo htmlspecialchars($series['SerieTitel']); ?></h1>
+    <p><?php echo htmlspecialchars($series['SerieBeschrijving']); ?></p>
+    <?php if (!empty($series['TrailerURL'])): ?>
+        <div class="trailer">
+            <h2>Trailer</h2>
+            <iframe width="560" height="315" src="<?php echo htmlspecialchars($series['TrailerURL']); ?>" frameborder="0" allowfullscreen></iframe>
+        </div>
+    <?php endif; ?>
+    <div class="actors">
+        <h2>Actors</h2>
+        <ul>
+            <?php foreach ($actors as $actor): ?>
+                <li><?php echo htmlspecialchars($actor); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <button id="watch-video-button" onclick="window.location.href = 'play.php';">Video kijken</button>
+    <button id="less-button">Minder weergeven</button>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const searchIcon = document.getElementById("searchIcon");
@@ -120,11 +161,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
         let searchVisible = false;
 
         searchIcon.addEventListener("click", function() {
+            searchTermInput.style.display = searchVisible ? "none" : "inline-block";
             if (!searchVisible) {
-                searchTermInput.style.display = "inline-block";
                 searchTermInput.focus();
-            } else {
-                searchTermInput.style.display = "none";
             }
             searchVisible = !searchVisible;
         });
@@ -133,18 +172,30 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
         const scrollLeftButton = document.getElementById('scrollLeftButton');
         const wrapper = document.querySelector('.series-container-wrapper');
 
-        scrollRightButton.addEventListener('click', function () {
+        scrollRightButton.addEventListener('click', function() {
             wrapper.scrollBy({
                 left: 500,
                 behavior: 'smooth'
             });
         });
 
-        scrollLeftButton.addEventListener('click', function () {
+        scrollLeftButton.addEventListener('click', function() {
             wrapper.scrollBy({
                 left: -500,
                 behavior: 'smooth'
             });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.series-card').forEach(function(card) {
+            card.addEventListener('click', function() {
+                document.getElementById('info-container').style.display = 'block';
+            });
+        });
+
+        document.getElementById('less-button').addEventListener('click', function() {
+            document.getElementById('info-container').style.display = 'none';
         });
     });
 </script>
