@@ -15,7 +15,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $stmt->store_result();
 
     if ($stmt->num_rows == 1) {
-        $_SESSION['KlantNr'] = $gebruikersnaam;
+    
+        $stmt->bind_result($klantNr);
+        $stmt->fetch();
+        
+    
+        $_SESSION['KlantNr'] = $klantNr;
     } else {
         $loginError = "Ongeldige gebruikersnaam of wachtwoord.";
     }
@@ -44,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <a href="index.php" class="home">Home</a>
     </div>
     <div class="header-right">
+    <a href="profiel.php" class="profile-link">Profiel</a>
         <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <div class="search-container">
                 <input type="text" id="searchTerm" name="searchTerm" required>

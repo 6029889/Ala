@@ -242,3 +242,21 @@ header {
 #less-button:hover {
   background-color: #5b9bd5;
 }
+
+.profile-link {
+  display: inline-block;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #92d051;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-right: 10px; /* Voeg wat ruimte toe tussen profiel en uitlog link */
+}
+
+.profile-link:hover {
+  background-color: #5b9bd5;
+}
