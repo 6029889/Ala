@@ -49,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <a href="index.php" class="home">Home</a>
     </div>
     <div class="header-right">
-    <a href="profiel.php" class="profile-link">Profiel</a>
         <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <div class="search-container">
                 <input type="text" id="searchTerm" name="searchTerm" required>
@@ -57,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             </div>
         </form>
         <a href="logout.php" class="logout-link">Uitloggen</a>
+        <a href="profiel.php" class="profile-link">Profiel</a>
     </div>
 </header>
 <div>
