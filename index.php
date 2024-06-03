@@ -68,47 +68,65 @@ function displaySeries($searchTerm = "") {
         die("Kan geen verbinding maken met de database: " . $conn->connect_error);
     }
 
-    $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1";
-    if (!empty($searchTerm)) {
-        $sql .= " AND SerieTitel LIKE ?";
-    }
-    $sql .= " LIMIT 20";
+    // Haal alle unieke genres op
+    $genres_query = "SELECT DISTINCT Genre.GenreID, Genre.GenreNaam FROM Genre INNER JOIN serie_genre ON Genre.GenreID = serie_genre.GenreID INNER JOIN serie ON serie.SerieID = serie_genre.SerieID WHERE serie.Actief = 1";
+    $genres_result = $conn->query($genres_query);
 
-    $stmt = $conn->prepare($sql);
-    if (!empty($searchTerm)) {
-        $searchParam = '%' . $searchTerm . '%';
-        $stmt->bind_param("s", $searchParam);
-    }
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if ($genres_result->num_rows > 0) {
+        while ($genre_row = $genres_result->fetch_assoc()) {
+            $genreID = $genre_row['GenreID'];
+            $genreNaam = $genre_row['GenreNaam'];
 
-    if ($result->num_rows > 0) {
-        echo "<div class='series-container-wrapper'>";
-        
-        echo "<div class='series-container'>";
-        echo "<button id='scrollLeftButton'><i class='fas fa-angle-left'></i></button>";
-        while ($row = $result->fetch_assoc()) {
-            $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);
-            $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
-            echo "<div class='series-card' data-serie-id='" . $row['SerieID'] . "' style='text-decoration: none; color: inherit; cursor: pointer;'>";
-            if (file_exists($imagePath)) {
-                echo "<img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
+            // Query om series per genre op te halen
+            $sql = "SELECT serie.SerieID, serie.SerieTitel, serie.IMDBLink FROM serie INNER JOIN serie_genre ON serie.SerieID = serie_genre.SerieID WHERE serie_genre.GenreID = ? AND serie.Actief = 1";
+            if (!empty($searchTerm)) {
+                $sql .= " AND serie.SerieTitel LIKE ?";
             }
-            echo "<h3>" . $row['SerieTitel'] . "</h3>";
-            echo "</div>";
-        }    
-        echo "</div>";
-        echo "<button id='scrollRightButton' class='scroll-button'><i class='fas fa-angle-right'></i></button>";
-        echo "</div>";
+            $sql .= " LIMIT 20";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $genreID);
+            if (!empty($searchTerm)) {
+                $searchParam = '%' . $searchTerm . '%';
+                $stmt->bind_param("s", $searchParam);
+            }
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                echo "<div class='series-container-wrapper'>";
+                
+                echo "<h2>$genreNaam</h2>"; // Toon het genre bovenaan
+
+                echo "<div class='series-container' id='series-container-$genreID'>";
+                echo "<button class='scrollLeftButton' data-container-id='series-container-$genreID'><i class='fas fa-angle-left'></i></button>";
+                while ($row = $result->fetch_assoc()) {
+                    $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);
+                    $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
+                    echo "<div class='series-card' data-serie-id='" . $row['SerieID'] . "' style='text-decoration: none; color: inherit; cursor: pointer;'>";
+                    if (file_exists($imagePath)) {
+                        echo "<img src='" . $imagePath . "' alt='" . $row['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
+                    }
+                    echo "<h3>" . $row['SerieTitel'] . "</h3>";
+                    echo "</div>";
+                }    
+                echo "<button class='scrollRightButton' data-container-id='series-container-$genreID'><i class='fas fa-angle-right'></i></button>";
+                echo "</div>";
+
+                echo "</div>";
+            }
+            
+            $stmt->close();
+        }
     } else {
         echo "<div class='series-container'>";
         echo "Geen series gevonden.";
         echo "</div>";
     }
-    
-    $stmt->close();
+
     $conn->close();
-} 
+}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
     $searchTerm = $_GET['searchTerm'];
@@ -116,7 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
 } else {
     displaySeries();
 }
-
 
 $series = [
     'SerieTitel' => 'Breaking Bad',
@@ -161,31 +178,32 @@ $actors = [
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const searchIcon = document.getElementById("searchIcon");
-        const searchTermInput = document.getElementById("searchTerm");
-        let searchVisible = false;
+document.addEventListener("DOMContentLoaded", function() {
+    const searchIcon = document.getElementById("searchIcon");
+    const searchTermInput = document.getElementById("searchTerm");
+    let searchVisible = false;
 
-        searchIcon.addEventListener("click", function() {
-            searchTermInput.style.display = searchVisible ? "none" : "inline-block";
-            if (!searchVisible) {
-                searchTermInput.focus();
-            }
-            searchVisible = !searchVisible;
-        });
+    searchIcon.addEventListener("click", function() {
+        searchTermInput.style.display = searchVisible ? "none" : "inline-block";
+        if (!searchVisible) {
+            searchTermInput.focus();
+        }
+        searchVisible = !searchVisible;
+    });
 
-        const scrollRightButton = document.getElementById('scrollRightButton');
-        const scrollLeftButton = document.getElementById('scrollLeftButton');
-        const wrapper = document.querySelector('.series-container-wrapper');
-
-        scrollRightButton.addEventListener('click', function() {
+    document.querySelectorAll('.scrollRightButton').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const wrapper = this.closest('.series-container-wrapper');
             wrapper.scrollBy({
                 left: 500,
                 behavior: 'smooth'
             });
         });
+    });
 
-        scrollLeftButton.addEventListener('click', function() {
+    document.querySelectorAll('.scrollLeftButton').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const wrapper = this.closest('.series-container-wrapper');
             wrapper.scrollBy({
                 left: -500,
                 behavior: 'smooth'
@@ -204,6 +222,7 @@ $actors = [
             document.getElementById('info-container').style.display = 'none';
         });
     });
+});
 </script>
 </body>
 </html>

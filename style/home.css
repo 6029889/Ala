@@ -152,10 +152,10 @@ header {
   text-decoration: underline;
 }
 
-#scrollRightButton,
-#scrollLeftButton {
-  position: fixed;
-  top: 30%;
+.scrollRightButton,
+.scrollLeftButton {
+  position: absolute;
+  top: 50%;
   width: 30px;
   height: 30px;
   border-radius: 5px;
@@ -163,20 +163,22 @@ header {
   background-color: #92d051;
   color: white;
   transition: background-color 0.3s ease;
+  transform: translateY(-50%);
 }
 
-#scrollRightButton:hover,
-#scrollLeftButton:hover {
+.scrollRightButton {
+  right: 0;
+}
+
+.scrollLeftButton {
+  left: 0;
+}
+
+.scrollRightButton:hover,
+.scrollLeftButton:hover {
   background-color: #5b9bd5;
 }
 
-#scrollRightButton {
-  right: 10px;
-}
-
-#scrollLeftButton {
-  left: 10px;
-}
 #info-container {
   display: none;
   background-color: #f9f9f9;
