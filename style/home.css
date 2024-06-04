@@ -103,6 +103,7 @@ header {
   -ms-overflow-style: none;
   scrollbar-width: none;
   white-space: nowrap;
+  
 }
 
 .series-container-wrapper::-webkit-scrollbar {
@@ -154,7 +155,7 @@ header {
 
 .scrollRightButton,
 .scrollLeftButton {
-  position: absolute;
+  position: sticky;
   top: 50%;
   width: 30px;
   height: 30px;
@@ -164,6 +165,8 @@ header {
   color: white;
   transition: background-color 0.3s ease;
   transform: translateY(-50%);
+  z-index: 2;
+  
 }
 
 .scrollRightButton {

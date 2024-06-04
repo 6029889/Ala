@@ -85,21 +85,28 @@ function displaySeries($searchTerm = "") {
             $sql .= " LIMIT 20";
 
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $genreID);
+
             if (!empty($searchTerm)) {
                 $searchParam = '%' . $searchTerm . '%';
-                $stmt->bind_param("s", $searchParam);
+                $stmt->bind_param("is", $genreID, $searchParam);
+            } else {
+                $stmt->bind_param("i", $genreID);
             }
+
             $stmt->execute();
             $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
                 echo "<div class='series-container-wrapper'>";
-                
+                $numSeries = $result->num_rows;
+              
                 echo "<h2>$genreNaam</h2>"; // Toon het genre bovenaan
 
                 echo "<div class='series-container' id='series-container-$genreID'>";
-                echo "<button class='scrollLeftButton' data-container-id='series-container-$genreID'><i class='fas fa-angle-left'></i></button>";
+                if ($numSeries >= 9) {
+
+                    echo "<button class='scrollLeftButton' data-container-id='series-container-$genreID'><i class='fas fa-angle-left'></i></button>";
+                }
                 while ($row = $result->fetch_assoc()) {
                     $serieIDWithoutZeroes = sprintf('%05d', $row['SerieID']);
                     $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
@@ -110,10 +117,14 @@ function displaySeries($searchTerm = "") {
                     echo "<h3>" . $row['SerieTitel'] . "</h3>";
                     echo "</div>";
                 }    
-                echo "<button class='scrollRightButton' data-container-id='series-container-$genreID'><i class='fas fa-angle-right'></i></button>";
-                echo "</div>";
+                if ($numSeries >= 9) {
 
+                    echo "<button class='scrollRightButton' data-container-id='series-container-$genreID'><i class='fas fa-angle-right'></i></button>";
+                }
                 echo "</div>";
+               
+                echo "</div>";
+                
             }
             
             $stmt->close();
@@ -126,7 +137,6 @@ function displaySeries($searchTerm = "") {
 
     $conn->close();
 }
-
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
     $searchTerm = $_GET['searchTerm'];
