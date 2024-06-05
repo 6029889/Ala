@@ -1,8 +1,8 @@
 body {
   overflow-x: hidden;
   font-family: 'Arial', sans-serif;
-  background-color: #1a1a2e; /* Dark blue background */
-  color: #ffffff; /* White text for better readability */
+  background-color: #1a1a2e;
+  color: #ffffff;
 }
 
 .container {
@@ -24,7 +24,7 @@ body {
 #searchTerm {
   position: absolute;
   top: 10px;
-  right: calc(10% + 5px);
+  right: calc(19% + 5px);
   display: none;
   width: 150px;
   padding: 5px;
@@ -34,15 +34,15 @@ body {
 }
 
 .search {
-  max-width: 70px;
-  height: 50px;
+  max-width: 60px;
+  height: 40px;
   margin-right: 10px;
   cursor: pointer;
   vertical-align: middle;
 }
 
 h1, h2, h3, p {
-  color: #ffffff; /* White text for headings and paragraphs */
+  color: #ffffff;
 }
 
 .logout-link,
@@ -99,7 +99,7 @@ header {
   scrollbar-width: none;
   white-space: nowrap;
   padding: 20px;
-  background-color: #16213e; /* Darker background for series container */
+  background-color: #16213e;
   border-radius: 10px;
   margin-bottom: 20px;
 }
@@ -110,7 +110,7 @@ header {
 
 .genre-title {
   font-size: 24px;
-  color: #ffffff; /* White text for genre title */
+  color: #ffffff;
   margin-bottom: 10px;
 }
 
@@ -123,7 +123,7 @@ header {
 
 .series-card {
   width: 150px;
-  background-color: #0f3460; /* Darker background for series card */
+  background-color: #0f3460;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px;
@@ -140,7 +140,7 @@ header {
 
 .series-title {
   font-size: 16px;
-  color: #ffffff; /* White text for series title */
+  color: #ffffff;
   margin: 10px 0 5px;
 }
 
@@ -183,20 +183,22 @@ header {
 
 #info-container {
   display: none;
-  background-color: #0f3460; /* Darker background for info container */
+  background-color: #0f3460;
   border-radius: 8px;
   padding: 20px;
   margin-top: 20px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  margin: 20px auto;
 }
 
 #info-container h1 {
-  color: #ffffff; /* White text for info container */
+  color: #ffffff;
   margin-bottom: 10px;
 }
 
 #info-container p {
-  color: #cccccc; /* Light gray text for info container */
+  color: #cccccc;
   margin-bottom: 20px;
 }
 
@@ -206,7 +208,7 @@ header {
 }
 
 .actors h2 {
-  color: #ffffff; /* White text for actors section */
+  color: #ffffff;
   margin-bottom: 10px;
 }
 
@@ -216,7 +218,7 @@ header {
 }
 
 .actors li {
-  color: #cccccc; /* Light gray text for actors list */
+  color: #cccccc;
   margin: 5px 0;
 }
 

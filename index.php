@@ -100,7 +100,7 @@ function displaySeries($searchTerm = "") {
                 echo "<div class='series-container-wrapper'>";
                 $numSeries = $result->num_rows;
               
-                echo "<h2>$genreNaam</h2>"; // Toon het genre bovenaan
+                echo "<h2>$genreNaam</h2>";
 
                 echo "<div class='series-container' id='series-container-$genreID'>";
                 if ($numSeries >= 9) {
@@ -124,7 +124,6 @@ function displaySeries($searchTerm = "") {
                 echo "</div>";
                
                 echo "</div>";
-                
             }
             
             $stmt->close();
@@ -146,7 +145,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
 }
 
 $series = [
-    'SerieTitel' => 'Breaking Bad',
     'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
     'TrailerURL' => 'https://www.youtube.com/embed/HhesaQXLuRY',
 ];
@@ -166,13 +164,13 @@ $actors = [
 ?>
 </div>
 
-<div id="info-container" style="display: none;">
+<div id="info-container">
     <h1><?php echo htmlspecialchars($series['SerieTitel']); ?></h1>
     <p><?php echo htmlspecialchars($series['SerieBeschrijving']); ?></p>
     <?php if (!empty($series['TrailerURL'])): ?>
         <div class="trailer">
             <h2>Trailer</h2>
-            <iframe width="560" height="315" src="<?php echo htmlspecialchars($series['TrailerURL']); ?>" frameborder="0" allowfullscreen></iframe>
+            <iframe width="200" height="100" src="<?php echo htmlspecialchars($series['TrailerURL']); ?>" frameborder="0" allowfullscreen></iframe>
         </div>
     <?php endif; ?>
     <div class="actors">
@@ -192,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const searchIcon = document.getElementById("searchIcon");
     const searchTermInput = document.getElementById("searchTerm");
     let searchVisible = false;
-
     searchIcon.addEventListener("click", function() {
         searchTermInput.style.display = searchVisible ? "none" : "inline-block";
         if (!searchVisible) {
@@ -200,6 +197,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         searchVisible = !searchVisible;
     });
+});
 
     document.querySelectorAll('.scrollRightButton').forEach(function(button) {
         button.addEventListener('click', function() {
@@ -222,15 +220,21 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
     });
-        document.querySelectorAll('.series-card').forEach(function(card) {
-            card.addEventListener('click', function() {
-                document.getElementById('info-container').style.display = 'block';
-            });
-        });
+    document.querySelectorAll('.series-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var infoContainer = document.getElementById('info-container');
+            var wrapperContainer = card.closest('.series-container-wrapper');
 
-        document.getElementById('less-button').addEventListener('click', function() {
-            document.getElementById('info-container').style.display = 'none';
-       });
+            wrapperContainer.appendChild(infoContainer);
+
+            document.querySelector('#info-container h1').textContent = card.querySelector('h3').textContent;
+
+            infoContainer.style.display = 'block';
+        });
+    });
+
+    document.getElementById('less-button').addEventListener('click', function() {
+        document.getElementById('info-container').style.display = 'none';
     });
 
 </script>
