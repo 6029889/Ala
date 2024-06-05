@@ -8,7 +8,7 @@ function getUserData($klantNr) {
     $conn = connect_to_database();
     
     
-    $stmt = $conn->prepare("SELECT klantnr, aboid, voornaam, tussenvoegsel, achternaam, email, genre FROM klant WHERE klantnr = ?");
+    $stmt = $conn->prepare("SELECT klantnr, voornaam, tussenvoegsel, achternaam, email, genre FROM klant WHERE klantnr = ?");
     $stmt->bind_param("i", $klantNr);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -45,6 +45,7 @@ if (isset($_SESSION['KlantNr'])) {
     <link rel="stylesheet" href="style/home.css" >
     <style>
         body {
+            color: black;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
@@ -60,14 +61,17 @@ if (isset($_SESSION['KlantNr'])) {
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
+            color: black;
         }
         .profile-container h1 {
             font-size: 24px;
             margin-bottom: 20px;
             text-align: center;
+            color: black;
         }
         .profile-container p {
             margin: 10px 0;
+            color: black;
         }
     </style>
 </head>
