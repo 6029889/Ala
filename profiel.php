@@ -81,8 +81,6 @@ if (isset($_SESSION['KlantNr'])) {
     <div class="profile-container">
         <?php if ($userData): ?>
             <h1>Profiel</h1>
-            <p><strong>Klantnummer:</strong> <?php echo htmlspecialchars($userData['klantnr']); ?></p>
-            <p><strong>Abonnementnummer:</strong> <?php echo htmlspecialchars($userData['aboid']); ?></p>
             <p><strong>Voornaam:</strong> <?php echo htmlspecialchars($userData['voornaam']); ?></p>
             <p><strong>Tussenvoegsel:</strong> <?php echo htmlspecialchars($userData['tussenvoegsel']); ?></p>
             <p><strong>Achternaam:</strong> <?php echo htmlspecialchars($userData['achternaam']); ?></p>

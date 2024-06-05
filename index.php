@@ -204,6 +204,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('.scrollRightButton').forEach(function(button) {
         button.addEventListener('click', function() {
             const wrapper = this.closest('.series-container-wrapper');
+            console.log(wrapper);
             wrapper.scrollBy({
                 left: 500,
                 behavior: 'smooth'
@@ -213,6 +214,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.querySelectorAll('.scrollLeftButton').forEach(function(button) {
         button.addEventListener('click', function() {
+            
             const wrapper = this.closest('.series-container-wrapper');
             wrapper.scrollBy({
                 left: -500,
@@ -220,8 +222,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
     });
-
-    document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.series-card').forEach(function(card) {
             card.addEventListener('click', function() {
                 document.getElementById('info-container').style.display = 'block';
@@ -230,9 +230,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         document.getElementById('less-button').addEventListener('click', function() {
             document.getElementById('info-container').style.display = 'none';
-        });
+       });
     });
-});
+
 </script>
 </body>
 </html>
