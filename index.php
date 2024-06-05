@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <img src="images/HOBO_logo.png" alt="">
         </div>
         <div class="header-right">
-            <button>Sign up</button>
+            <button onclick="window.location.href='register.php'">Sign up</button>
         </div>
     </header>
     <div>
