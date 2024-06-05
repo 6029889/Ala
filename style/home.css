@@ -183,13 +183,14 @@ header {
 
 #info-container {
   display: none;
+  box-sizing: border-box;
   background-color: #0f3460;
   border-radius: 8px;
   padding: 20px;
   margin-top: 20px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   width: 80%;
-  margin: 20px auto;
+  margin: 20px 20px;
 }
 
 #info-container h1 {
@@ -200,6 +201,7 @@ header {
 #info-container p {
   color: #cccccc;
   margin-bottom: 20px;
+  white-space: pre-wrap;
 }
 
 .trailer,
