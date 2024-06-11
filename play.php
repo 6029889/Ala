@@ -17,8 +17,13 @@ if ($conn->connect_error) {
     die("Kan geen verbinding maken met de database: " . $conn->connect_error);
 }
 
-// Fetch seasons for the given SerieID
-$seasons_query = "SELECT * FROM seizoen WHERE SerieID = ?";
+// Fetch seasons and episodes for the given SerieID
+$seasons_query = "
+    SELECT s.SeizoenID, s.Rang, s.Jaar, s.IMDBRating, a.AfleveringID, a.AflTitel, a.Duur 
+    FROM seizoen s 
+    LEFT JOIN aflevering a ON s.SeizoenID = a.SeizID 
+    WHERE s.SerieID = ?
+";
 $stmt = $conn->prepare($seasons_query);
 $stmt->bind_param("i", $serieID);
 $stmt->execute();
@@ -26,31 +31,21 @@ $seasons_result = $stmt->get_result();
 
 $seasons = [];
 while ($row = $seasons_result->fetch_assoc()) {
-    $seasons[] = $row;
+    $seasons[$row['SeizoenID']]['details'] = [
+        'Rang' => $row['Rang'],
+        'Jaar' => $row['Jaar'],
+        'IMDBRating' => $row['IMDBRating']
+    ];
+    if (!empty($row['AfleveringID'])) {
+        $seasons[$row['SeizoenID']]['episodes'][] = [
+            'AfleveringID' => $row['AfleveringID'],
+            'AflTitel' => $row['AflTitel'],
+            'Duur' => $row['Duur']
+        ];
+    }
 }
 
 $stmt->close();
-
-$episodes = [];
-
-foreach ($seasons as $season) {
-    // Fetch episodes for each season
-    $episodes_query = "SELECT * FROM aflevering WHERE seizID = ?";
-    $stmt = $conn->prepare($episodes_query);
-    $stmt->bind_param("i", $season['SeizID']);
-    if (!$stmt->execute()) {
-        die("Error: " . $conn->error); // Error handling for SQL execution
-    }
-    $episodes_result = $stmt->get_result();
-
-    while ($row = $episodes_result->fetch_assoc()) {
-        $episodes[$season['SeizID']][] = $row;
-        
-    }
-
-    $stmt->close();
-}
-
 $conn->close();
 ?>
 
@@ -73,27 +68,27 @@ $conn->close();
     </div>
 </header>
 
-
 <div class="seasons-container">
     <?php 
-     $seasonNumber = 1;
-    foreach ($seasons as $season): ?>
+    $seasonNumber = 1;
+    foreach ($seasons as $seizoenID => $season): ?>
         <div class="season">
-        <h2>Seizoen <?php echo $seasonNumber++; ?></h2>
+            <h2>Seizoen <?php echo $seasonNumber++; ?></h2>
             <ul>
-                <?php if (isset($episodes[$season['SeizID']])): ?>
-                    <?php foreach ($episodes[$season['SeizID']] as $episode): ?>
-                        <li><?php echo $episode['AfleveringTitel']; ?> - <?php echo $episode['Duur']; ?></li>
+                <?php if (!empty($season['episodes'])): ?>
+                    <?php foreach ($season['episodes'] as $episode): ?>
+                        <li>
+                            <a href="play_episode.php?episode_id=<?php echo $episode['AfleveringID']; ?>">
+                                <?php echo $episode['AflTitel']; ?> - <?php echo $episode['Duur']; ?>
+                            </a>
+                        </li>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <?php var_dump($seasons); ?>
                     <li>Geen afleveringen gevonden voor dit seizoen.</li>
                 <?php endif; ?>
             </ul>
         </div>
-
     <?php endforeach; ?>
-
 </div>
 
 </body>
