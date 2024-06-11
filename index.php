@@ -116,6 +116,7 @@ function displaySeries($searchTerm = "") {
                     }
                     echo "<h3>" . $row['SerieTitel'] . "</h3>";
                     echo "</div>";
+                    $serieID = $row['SerieID'];
                 }    
                 if ($numSeries >= 9) {
 
@@ -124,6 +125,7 @@ function displaySeries($searchTerm = "") {
                 echo "</div>";
                
                 echo "</div>";
+              
             }
             
             $stmt->close();
@@ -163,7 +165,6 @@ $actors = [
 
 ?>
 </div>
-
 <div id="info-container">
     <h1><?php echo htmlspecialchars($series['SerieTitel']); ?></h1>
     <p><?php echo htmlspecialchars($series['SerieBeschrijving']); ?></p>
@@ -181,9 +182,12 @@ $actors = [
             <?php endforeach; ?>
         </ul>
     </div>
-    <button id="watch-video-button" onclick="window.location.href = 'play.php';">Video kijken</button>
+    <a href="play.php?serie_id=<?php echo $serieID; ?>" id="watch-video-button">Video kijken</a>
     <button id="less-button">Minder weergeven</button>
 </div>
+
+
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
