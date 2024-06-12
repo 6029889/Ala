@@ -3,6 +3,11 @@ include 'connect.php';
 
 session_start();
 
+if (!isset($_SESSION['KlantNr'])) {
+    die("Je moet ingelogd zijn om deze pagina te bekijken.");
+
+}
+
 // Check if SerieID is set
 if (!isset($_GET['serie_id'])) {
     die("SerieID is niet ingesteld.");
@@ -76,14 +81,16 @@ $conn->close();
             <h2>Seizoen <?php echo $seasonNumber++; ?></h2>
             <ul>
                 <?php if (!empty($season['episodes'])): ?>
+                  
                     <?php foreach ($season['episodes'] as $episode): ?>
                         <li>
-                            <a href="play_episode.php?episode_id=<?php echo $episode['AfleveringID']; ?>">
+                            <a href="play_episode.php?serie_id=<?php echo $serieID; ?>&episode_id=<?php echo $episode['AfleveringID']?>">
                                 <?php echo $episode['AflTitel']; ?> - <?php echo $episode['Duur']; ?>
                             </a>
                         </li>
                     <?php endforeach; ?>
                 <?php else: ?>
+               
                     <li>Geen afleveringen gevonden voor dit seizoen.</li>
                 <?php endif; ?>
             </ul>

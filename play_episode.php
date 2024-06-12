@@ -1,9 +1,33 @@
 <?php
-if (!isset($_GET['episode_id'])) {
-    die("Aflevering ID is niet ingesteld.");
+include 'connect.php';
+session_start();
+
+if (!isset($_SESSION['KlantNr'])) {
+    die("Je moet ingelogd zijn om deze pagina te bekijken.");
 }
 
+if (!isset($_GET['serie_id']) || !isset($_GET['episode_id']) || !isset($_SESSION['KlantNr'])) {
+    die("SerieID, AfleveringID of klantnr is niet ingesteld.");
+}
+
+$userID = $_SESSION['KlantNr']; // Haal klantnummer op uit de URL
+$serieID = $_GET['serie_id'];
 $episodeID = $_GET['episode_id'];
+
+// Verbinding maken met de database
+$conn = connect_to_database();
+
+if ($conn->connect_error) {
+    die("Kan geen verbinding maken met de database: " . $conn->connect_error);
+}
+
+// Nieuwe stream invoegen in de database
+$insert_query = "INSERT INTO stream (klantID,  AflID, d_start) VALUES (?, ?, NOW())";
+$stmt = $conn->prepare($insert_query);
+$stmt->bind_param("ii", $userID, $episodeID);
+$stmt->execute();
+$stmt->close();
+$conn->close();
 
 // Hardcode de URL van de video hier
 $video_url = "path_to_your_video.mp4"; // Vervang dit met het pad naar je video

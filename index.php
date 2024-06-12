@@ -165,9 +165,14 @@ $actors = [
 
 ?>
 </div>
+<?php
+// Assuming $serieID is set properly within the PHP code
+
+?>
+
 <div id="info-container">
-    <h1><?php echo htmlspecialchars($series['SerieTitel']); ?></h1>
-    <p><?php echo htmlspecialchars($series['SerieBeschrijving']); ?></p>
+    <h1><?php echo htmlspecialchars($series['SerieTitel'] ?? ''); ?></h1>
+    <p><?php echo htmlspecialchars($series['SerieBeschrijving'] ?? ''); ?></p>
     <?php if (!empty($series['TrailerURL'])): ?>
         <div class="trailer">
             <h2>Trailer</h2>
@@ -182,7 +187,7 @@ $actors = [
             <?php endforeach; ?>
         </ul>
     </div>
-    <a href="play.php?serie_id=<?php echo $serieID; ?>" id="watch-video-button">Video kijken</a>
+   <button id="watch-video-button">Bekijk serie</button>
     <button id="less-button">Minder weergeven</button>
 </div>
 
@@ -236,6 +241,31 @@ document.addEventListener("DOMContentLoaded", function() {
             infoContainer.style.display = 'block';
         });
     });
+  
+    document.addEventListener('DOMContentLoaded', (event) => {
+    const watchButton = document.getElementById('watch-video-button');
+
+
+    document.querySelectorAll('.series-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const serieID = this.getAttribute('data-serie-id');
+            if (serieID) {
+                
+                watchButton.setAttribute('data-serie-id', serieID);
+               
+            }
+        });
+    });
+
+
+    watchButton.addEventListener('click', function() {
+        const serieID = watchButton.getAttribute('data-serie-id');
+        if (serieID) {
+
+            window.location.href = 'play.php?serie_id=' + serieID;
+        }
+    });
+});
 
     document.getElementById('less-button').addEventListener('click', function() {
         document.getElementById('info-container').style.display = 'none';
