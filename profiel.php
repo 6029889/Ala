@@ -35,6 +35,7 @@ function getWatchHistory($klantNr) {
         INNER JOIN serie ON se.SerieID = serie.SerieID
         WHERE s.klantID = ?
         ORDER BY s.d_start DESC
+        LIMIT 5
     ");
     $stmt->bind_param("i", $klantNr);
     $stmt->execute();
