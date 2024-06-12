@@ -22,7 +22,7 @@ if ($conn->connect_error) {
 }
 
 // Nieuwe stream invoegen in de database
-$insert_query = "INSERT INTO stream (klantID,  AflID, d_start) VALUES (?, ?, NOW())";
+$insert_query = "INSERT INTO stream (klantID, AflID, d_start) VALUES (?, ?, NOW())";
 $stmt = $conn->prepare($insert_query);
 $stmt->bind_param("ii", $userID, $episodeID);
 $stmt->execute();
@@ -31,6 +31,22 @@ $conn->close();
 
 // Hardcode de URL van de video hier
 $video_url = "path_to_your_video.mp4"; // Vervang dit met het pad naar je video
+
+$series = [
+    'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
+];
+
+$actors = [
+    'Bryan Cranston',
+    'Aaron Paul',
+    'Anna Gunn',
+    'Betsy Brandt',
+    'RJ Mitte',
+    'Dean Norris',
+    'Bob Odenkirk',
+    'Jonathan Banks',
+    'Giancarlo Esposito',
+];
 ?>
 
 <!DOCTYPE html>
@@ -53,11 +69,24 @@ $video_url = "path_to_your_video.mp4"; // Vervang dit met het pad naar je video
 </header>
 
 <div class="video-container">
-    <h2>Aflevering <?php echo $episodeID; ?></h2>
     <video width="800" controls>
-        <source src="<?php echo $video_url; ?>" type="video/mp4">
+        <source src="<?php echo $video_url; ?>" type="video-ala.mp4">
         Uw browser ondersteunt de video tag niet.
     </video>
+</div>
+
+<div class="description-container">
+    <h2>Aflevering <?php echo $episodeID; ?></h2>
+    <h2>Series Description</h2>
+    <p><?php echo $series['SerieBeschrijving']; ?></p>
+    <div class="actors">
+        <h3>Starring:</h3>
+        <ul>
+            <?php foreach ($actors as $actor): ?>
+                <li><?php echo $actor; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 </div>
 
 </body>

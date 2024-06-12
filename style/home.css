@@ -74,15 +74,16 @@ h1, h2, h3, p {
 }
 
 header {
-  position: absolute;
-  top: 20px;
+  position: fixed;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
-  z-index: 1;
+  z-index: 2;
+  background-color: #1a1a2e; /* Ensure header has background color */
 }
 
 .header-left img {
@@ -102,6 +103,10 @@ header {
   background-color: #16213e;
   border-radius: 10px;
   margin-bottom: 20px;
+}
+
+.series-container-wrapper:first-of-type {
+  margin-top: 100px; /* Adjust this value as needed to create space below the header */
 }
 
 .series-container-wrapper::-webkit-scrollbar {

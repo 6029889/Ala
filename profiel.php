@@ -72,53 +72,37 @@ if (isset($_SESSION['KlantNr'])) {
     <title>Profiel</title>
     <link rel="stylesheet" href="style/home.css" >
     <style>
-        body {
-            color: black;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .profile-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            color: black;
-        }
-        .profile-container h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: black;
-        }
-        .profile-container p {
-            margin: 10px 0;
-            color: black;
-        }
-        .watch-history {
-            margin-top: 20px;
-            
-        }
-        .watch-history h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            text-align: center;
-            color: black;
-        }
-        .watch-history ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .watch-history li {
-            margin-bottom: 10px;
-            color: black;
-        }
+    .profile-container {
+        background-color: #16213e;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        width: 300px;
+        color: white;
+    }
+    .profile-container h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .profile-container p {
+        margin: 10px 0;
+    }
+    .watch-history {
+        margin-top: 20px;
+    }
+    .watch-history h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .watch-history ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .watch-history li {
+        margin-bottom: 10px;
+    }
     </style>
 </head>
 <body>

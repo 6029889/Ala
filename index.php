@@ -125,7 +125,6 @@ function displaySeries($searchTerm = "") {
                 echo "</div>";
                
                 echo "</div>";
-              
             }
             
             $stmt->close();
