@@ -3,7 +3,6 @@ include 'connect.php';
 
 session_start();
 
-// Functie om gebruikersgegevens op te halen
 function getUserData($klantNr) {
     $conn = connect_to_database();
     
@@ -22,6 +21,7 @@ function getUserData($klantNr) {
     
     return $userData;
 }
+
 function updateUserData($klantNr, $voornaam, $tussenvoegsel, $achternaam, $email, $genre) {
     $conn = connect_to_database();
     
@@ -39,7 +39,7 @@ function updateUserData($klantNr, $voornaam, $tussenvoegsel, $achternaam, $email
 
 
 
-// Functie om kijkgeschiedenis op te halen
+
 function getWatchHistory($klantNr) {
     $conn = connect_to_database();
     
@@ -68,14 +68,14 @@ function getWatchHistory($klantNr) {
     return $history;
 }
 
-// Controleer of de gebruiker is ingelogd
+
 if (isset($_SESSION['KlantNr'])) {
     $klantNr = $_SESSION['KlantNr'];
 
     $userData = getUserData($klantNr);
     $watchHistory = getWatchHistory($klantNr);
 } else {
-    // Redirect naar inlogpagina als de gebruiker niet is ingelogd
+
     header("Location: login.php");
     exit();
 }

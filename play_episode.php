@@ -6,22 +6,39 @@ if (!isset($_SESSION['KlantNr'])) {
     die("Je moet ingelogd zijn om deze pagina te bekijken.");
 }
 
-if (!isset($_GET['serie_id']) || !isset($_GET['episode_id']) || !isset($_SESSION['KlantNr'])) {
-    die("SerieID, AfleveringID of klantnr is niet ingesteld.");
+if (!isset($_GET['serie_id']) || !isset($_GET['episode_id'])) {
+    die("SerieID of AfleveringID is niet ingesteld.");
 }
 
-$userID = $_SESSION['KlantNr']; // Haal klantnummer op uit de URL
+$userID = $_SESSION['KlantNr'];
 $serieID = $_GET['serie_id'];
 $episodeID = $_GET['episode_id'];
 
-// Verbinding maken met de database
 $conn = connect_to_database();
 
 if ($conn->connect_error) {
     die("Kan geen verbinding maken met de database: " . $conn->connect_error);
 }
 
-// Nieuwe stream invoegen in de database
+$episode_query = "
+    SELECT a.AflTitel
+    FROM aflevering a
+    WHERE a.AfleveringID = ?
+";
+$stmt = $conn->prepare($episode_query);
+$stmt->bind_param("i", $episodeID);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $episode = $result->fetch_assoc();
+    $episodeTitle = $episode['AflTitel'];
+} else {
+    die("Aflevering niet gevonden.");
+}
+
+$stmt->close();
+
 $insert_query = "INSERT INTO stream (klantID, AflID, d_start) VALUES (?, ?, NOW())";
 $stmt = $conn->prepare($insert_query);
 $stmt->bind_param("ii", $userID, $episodeID);
@@ -29,8 +46,7 @@ $stmt->execute();
 $stmt->close();
 $conn->close();
 
-// Hardcode de URL van de video hier
-$video_url = "path_to_your_video.mp4"; // Vervang dit met het pad naar je video
+$video_url = "path_to_your_video.mp4";
 
 $series = [
     'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
@@ -70,20 +86,20 @@ $actors = [
 
 <div class="video-container">
     <video width="800" controls>
-        <source src="<?php echo $video_url; ?>" type="video-ala.mp4">
+        <source src="<?php echo $video_url; ?>" type="video/mp4">
         Uw browser ondersteunt de video tag niet.
     </video>
 </div>
 
 <div class="description-container">
-    <h2>Aflevering <?php echo $episodeID; ?></h2>
+    <h2><?php echo htmlspecialchars($episodeTitle); ?></h2>
     <h2>Series Description</h2>
-    <p><?php echo $series['SerieBeschrijving']; ?></p>
+    <p><?php echo htmlspecialchars($series['SerieBeschrijving']); ?></p>
     <div class="actors">
         <h3>Starring:</h3>
         <ul>
             <?php foreach ($actors as $actor): ?>
-                <li><?php echo $actor; ?></li>
+                <li><?php echo htmlspecialchars($actor); ?></li>
             <?php endforeach; ?>
         </ul>
     </div>
