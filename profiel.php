@@ -22,6 +22,22 @@ function getUserData($klantNr) {
     
     return $userData;
 }
+function updateUserData($klantNr, $voornaam, $tussenvoegsel, $achternaam, $email, $genre) {
+    $conn = connect_to_database();
+    
+    $stmt = $conn->prepare("UPDATE klant SET voornaam = ?, tussenvoegsel = ?, achternaam = ?, email = ?, genre = ? WHERE klantnr = ?");
+    $stmt->bind_param("sssssi", $voornaam, $tussenvoegsel, $achternaam, $email, $genre, $klantNr);
+    $stmt->execute();
+
+    $success = $stmt->affected_rows > 0;
+
+    $stmt->close();
+    $conn->close();
+    
+    return $success;
+}
+
+
 
 // Functie om kijkgeschiedenis op te halen
 function getWatchHistory($klantNr) {
@@ -62,6 +78,19 @@ if (isset($_SESSION['KlantNr'])) {
     // Redirect naar inlogpagina als de gebruiker niet is ingelogd
     header("Location: login.php");
     exit();
+}
+if (isset($_POST['submit'])) {
+    $voornaam = $_POST['voornaam'];
+    $tussenvoegsel = $_POST['tussenvoegsel'];
+    $achternaam = $_POST['achternaam'];
+    $email = $_POST['email'];
+    $genre = $_POST['genre'];
+
+    $success = updateUserData($klantNr, $voornaam, $tussenvoegsel, $achternaam, $email, $genre);
+
+    if ($success) {
+        $userData = getUserData($klantNr);
+    }
 }
 ?>
 
@@ -116,11 +145,30 @@ if (isset($_SESSION['KlantNr'])) {
     <div class="profile-container">
         <?php if ($userData): ?>
             <h1>Profiel</h1>
-            <p><strong>Voornaam:</strong> <?php echo htmlspecialchars($userData['voornaam']); ?></p>
-            <p><strong>Tussenvoegsel:</strong> <?php echo htmlspecialchars($userData['tussenvoegsel']); ?></p>
-            <p><strong>Achternaam:</strong> <?php echo htmlspecialchars($userData['achternaam']); ?></p>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars($userData['email']); ?></p>
-            <p><strong>Genre:</strong> <?php echo htmlspecialchars($userData['genre']); ?></p>
+          <form method="post" action="">
+            <p>
+                <label for="voornaam">Voornaam:</label><br>
+                <input type="text" name="voornaam" id="voornaam" value="<?php echo htmlspecialchars($userData['voornaam']); ?>" required>
+            </p>
+            <p>
+                <label for="tussenvoegsel">Tussenvoegsel:</label><br>
+                <input type="text" name="tussenvoegsel" id="tussenvoegsel" value="<?php echo htmlspecialchars($userData['tussenvoegsel']); ?>">
+            </p>
+            <p>
+                <label for="achternaam">Achternaam:</label><br>
+                <input type="text" name="achternaam" id="achternaam" value="<?php echo htmlspecialchars($userData['achternaam']); ?>" required>
+            </p>
+            <p>
+                <label for="email">Email:</label><br>
+                <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($userData['email']); ?>" required>
+            </p>
+            <p>
+                <label for="genre">Favoriete genre:</label><br>
+                <input type="text" name="genre" id="genre" value="<?php echo htmlspecialchars($userData['genre']); ?>" required>
+            </p>
+            <p>
+                <input type="submit" name="submit" value="Opslaan">
+            </p>
 
             <div class="watch-history">
                 <h2>Kijkgeschiedenis</h2>

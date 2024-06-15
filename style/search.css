@@ -1,0 +1,101 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+}
+
+.header-left img {
+    height: 50px;
+}
+
+.header-left a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    margin-left: 20px;
+}
+
+.header-right form {
+    display: flex;
+    align-items: center;
+}
+
+.header-right input[type="text"] {
+    padding: 5px;
+    font-size: 1em;
+}
+
+.header-right button {
+    padding: 5px 10px;
+    font-size: 1em;
+    background-color: #555;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.header-right a.logout-link {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+main {
+    padding: 20px;
+}
+
+.series-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.series-card {
+    background-color: white;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.series-card:hover {
+    transform: scale(1.05);
+}
+
+.series-card img {
+    max-width: 100px;
+    margin-bottom: 10px;
+}
+
+.series-card h3 {
+    margin: 0;
+    font-size: 1em;
+    color: #333;
+}
+.series-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.series-link:hover .series-card {
+    transform: scale(1.05);
+    transition: transform 0.3s;
+}
+
+.series-card {
+    cursor: pointer;
+    /* bestaande styling hier */
+}

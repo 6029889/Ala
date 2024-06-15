@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <div class="search-container">
                 <input type="text" id="searchTerm" name="searchTerm" required>
-                <img src="images/search.png" alt="" class="search" id="searchIcon">
+                <a href="search.php"><img src="images/search.png" alt="" class="search" id="searchIcon"></a>
             </div>
         </form>
         <a href="logout.php" class="logout-link">Uitloggen</a>
@@ -138,13 +138,8 @@ function displaySeries($searchTerm = "") {
     $conn->close();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['searchTerm'])) {
-    $searchTerm = $_GET['searchTerm'];
-    displaySeries($searchTerm);
-} else {
-    displaySeries();
-}
 
+    displaySeries();
 $series = [
     'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
     'TrailerURL' => 'https://www.youtube.com/embed/HhesaQXLuRY',
@@ -164,10 +159,6 @@ $actors = [
 
 ?>
 </div>
-<?php
-// Assuming $serieID is set properly within the PHP code
-
-?>
 
 <div id="info-container">
     <h1><?php echo htmlspecialchars($series['SerieTitel'] ?? ''); ?></h1>
@@ -194,18 +185,6 @@ $actors = [
 
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const searchIcon = document.getElementById("searchIcon");
-    const searchTermInput = document.getElementById("searchTerm");
-    let searchVisible = false;
-    searchIcon.addEventListener("click", function() {
-        searchTermInput.style.display = searchVisible ? "none" : "inline-block";
-        if (!searchVisible) {
-            searchTermInput.focus();
-        }
-        searchVisible = !searchVisible;
-    });
-});
 
     document.querySelectorAll('.scrollRightButton').forEach(function(button) {
         button.addEventListener('click', function() {
