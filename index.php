@@ -9,29 +9,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
     $conn = connect_to_database();
 
+  
     $stmt = $conn->prepare("SELECT KlantNr FROM klant WHERE Email = ? AND password = ?");
     $stmt->bind_param("ss", $gebruikersnaam, $wachtwoord);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->num_rows == 1) {
-    
         $stmt->bind_result($klantNr);
         $stmt->fetch();
-        
-    
         $_SESSION['KlantNr'] = $klantNr;
+        $_SESSION['userType'] = 'klant';
     } else {
-        $loginError = "Ongeldige gebruikersnaam of wachtwoord.";
+       
+        $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? AND password = ?");
+        $stmt->bind_param("ss", $gebruikersnaam, $wachtwoord);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows == 1) {
+            $stmt->bind_result($userID);
+            $stmt->fetch();
+            $_SESSION['id'] = $userID;
+            $_SESSION['userType'] = 'admin';
+        } else {
+            $loginError = "Ongeldige gebruikersnaam of wachtwoord.";
+        }
     }
 
     $stmt->close();
     $conn->close();
 }
 
+
 ?>
 
-<?php if (isset($_SESSION['KlantNr'])): ?>
+<?php if (isset($_SESSION['KlantNr']) || isset($_SESSION['id'])): ?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>

@@ -2,15 +2,17 @@
 include 'connect.php';
 session_start();
 
-if (!isset($_SESSION['KlantNr'])) {
+if (!isset($_SESSION['KlantNr']) && !isset($_SESSION['id'])) {
     die("Je moet ingelogd zijn om deze pagina te bekijken.");
 }
 
 if (!isset($_GET['serie_id']) || !isset($_GET['episode_id'])) {
     die("SerieID of AfleveringID is niet ingesteld.");
 }
+if (isset($_SESSION['KlantNr'])) {
+    $klantID = $_SESSION['KlantNr'];
+}
 
-$userID = $_SESSION['KlantNr'];
 $serieID = $_GET['serie_id'];
 $episodeID = $_GET['episode_id'];
 
@@ -39,15 +41,26 @@ if ($result->num_rows > 0) {
 
 $stmt->close();
 
-$insert_query = "INSERT INTO stream (klantID, AflID, d_start) VALUES (?, ?, NOW())";
-$stmt = $conn->prepare($insert_query);
-$stmt->bind_param("ii", $userID, $episodeID);
-$stmt->execute();
-$stmt->close();
-$conn->close();
+// Functie om gegevens in te voegen in de stream tabel
+function insertintoStream($klantID, $AflID, $d_start)
+{
+    global $conn;
+    $insert_query = "INSERT INTO stream (klantID, AflID, d_start) VALUES (?, ?, NOW())";
+    $stmt = $conn->prepare($insert_query);
+    $stmt->bind_param("ii", $klantID, $AflID);
+    $stmt->execute();
+    $stmt->close();
+}
 
+// Controleer of de gebruiker geen admin is voordat de functie wordt aangeroepen
+if (!isset($_SESSION['userType']) || $_SESSION['userType'] !== 'admin') {
+    insertintoStream($klantID, $episodeID, date("Y-m-d H:i:s"));
+}
+
+// Voorbeeld URL naar de video - vervang dit met de daadwerkelijke URL naar je video
 $video_url = "path_to_your_video.mp4";
 
+// Voorbeeld serie en acteursgegevens
 $series = [
     'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
 ];
@@ -93,10 +106,10 @@ $actors = [
 
 <div class="description-container">
     <h2><?php echo htmlspecialchars($episodeTitle); ?></h2>
-    <h2>Series Description</h2>
+    <h2>Series Beschrijving</h2>
     <p><?php echo htmlspecialchars($series['SerieBeschrijving']); ?></p>
     <div class="actors">
-        <h3>Starring:</h3>
+        <h3>Met:</h3>
         <ul>
             <?php foreach ($actors as $actor): ?>
                 <li><?php echo htmlspecialchars($actor); ?></li>

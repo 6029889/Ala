@@ -3,10 +3,10 @@ include 'connect.php';
 
 session_start();
 
-if (!isset($_SESSION['KlantNr'])) {
+if (!isset($_SESSION['KlantNr']) && !isset($_SESSION['id'])) {
     die("Je moet ingelogd zijn om deze pagina te bekijken.");
-
 }
+
 
 // Check if SerieID is set
 if (!isset($_GET['serie_id'])) {
