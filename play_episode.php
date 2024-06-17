@@ -42,10 +42,10 @@ if ($result->num_rows > 0) {
 $stmt->close();
 
 
-function insertintoStream($klantID, $AflID, $d_start)
+function insertintoStream($klantID, $AflID, $d_start, $d_eind)
 {
     global $conn;
-    $insert_query = "INSERT INTO stream (klantID, AflID, d_start) VALUES (?, ?, NOW())";
+    $insert_query = "INSERT INTO stream (klantID, AflID, d_start, d_eind) VALUES (?, ?, NOW(), NOW() + INTERVAL 1 HOUR)";
     $stmt = $conn->prepare($insert_query);
     $stmt->bind_param("ii", $klantID, $AflID);
     $stmt->execute();
@@ -54,7 +54,7 @@ function insertintoStream($klantID, $AflID, $d_start)
 
 
 if (!isset($_SESSION['userType']) || $_SESSION['userType'] !== 'admin') {
-    insertintoStream($klantID, $episodeID, date("Y-m-d H:i:s"));
+    insertintoStream($klantID, $episodeID, date("Y-m-d H:i:s"), date("Y-m-d H:i:s", strtotime("+1 hour")));
 }
 
 $video_url = "path_to_your_video.mp4";

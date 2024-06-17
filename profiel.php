@@ -122,6 +122,7 @@ $allSeries = [];
 if ($klantNr !== null) {
     $userData = getUserData($klantNr);
     $watchHistory = getWatchHistory($klantNr);
+    $todayWatchTime = getTodayWatchTime($klantNr);
 }
 
 if ($isAdmin) {
@@ -150,6 +151,29 @@ if (isset($_POST['updateSeries'])) {
     
     $allSeries = getAllSeries();
 }
+function getTodayWatchTime($klantNr) {
+    $conn = connect_to_database();
+    $stmt = $conn->prepare("
+        SELECT SUM(TIMESTAMPDIFF(SECOND, s.d_start, s.d_eind)) as watchTime
+        FROM stream s
+        WHERE s.klantID = ? AND DATE(s.d_start) = CURDATE()
+    ");
+    $stmt->bind_param("i", $klantNr);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $watchTime = 0;
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $watchTime = $row['watchTime'];
+    }
+
+    $stmt->close();
+    $conn->close();
+    
+    return $watchTime;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -255,6 +279,7 @@ if (isset($_POST['updateSeries'])) {
                                 <strong><?php echo htmlspecialchars($entry['SerieTitel']); ?></strong>: 
                                 <?php echo htmlspecialchars($entry['AflTitel']); ?> 
                                 (Gestart op: <?php echo htmlspecialchars($entry['d_start']); ?>)
+                                (Beëindigd op: <?php echo htmlspecialchars($entry['d_eind']); ?>
                             </li>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -262,7 +287,22 @@ if (isset($_POST['updateSeries'])) {
                     <?php endif; ?>
                 </ul>
             </div>
-            <?php endif; ?>
+            <div class="watch-time-statistics">
+                <h2>Kijktijd Vandaag</h2>
+                <p>
+                    <?php 
+                        if ($todayWatchTime) {
+                            $hours = floor($todayWatchTime / 3600);
+                            $minutes = floor(($todayWatchTime % 3600) / 60);
+                            echo "Je hebt vandaag " . $hours . " uur en " . $minutes . " minuten gekeken.";
+                        } else {
+                            echo "Je hebt vandaag nog niets gekeken.";
+                        }
+                    ?>
+                </p>
+            </div>
+        <?php endif; ?>
+           
             <?php if ($isAdmin): ?>
             <div class="series-management">
                 <h2>Series Beheer</h2>

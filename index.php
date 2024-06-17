@@ -179,7 +179,7 @@ function displaySeries($searchTerm = "") {
 
 
 
-  
+    
 $series = [
     'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
     'TrailerURL' => 'https://www.youtube.com/embed/HhesaQXLuRY',
@@ -207,13 +207,6 @@ if (isset($_SESSION['KlantNr'])) {
         echo "<div class='series-container-wrapper'>";
         echo "<h2>Laatst Bekeken Series</h2>";
         echo "<div class='series-container' id='last-watched-series-container'>";
-        
-        $numSeries = count($lastWatchedSeries);
-        
-        if ($numSeries >= 9) {
-            echo "<button class='scrollLeftButton' data-container-id='last-watched-series-container'><i class='fas fa-angle-left'></i></button>";
-        }
-        
         foreach ($lastWatchedSeries as $series) {
             $serieIDWithoutZeroes = sprintf('%05d', $series['SerieID']);
             $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
@@ -224,18 +217,12 @@ if (isset($_SESSION['KlantNr'])) {
             echo "<h3>" . $series['SerieTitel'] . "</h3>";
             echo "</div>";
         }
-        
-        if ($numSeries >= 9) {
-            echo "<button class='scrollRightButton' data-container-id='last-watched-series-container'><i class='fas fa-angle-right'></i></button>";
-        }
-        
         echo "</div>";
         echo "</div>";
     }
 }
 displaySeries();
 ?>
-
 </div>
 
 <div id="info-container">
