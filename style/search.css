@@ -44,13 +44,35 @@ header {
     cursor: pointer;
 }
 
-.header-right a.logout-link {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
+.logout-link,
+.home {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-main {
+.logout-link {
+  background-color: #92d051;
+  color: white;
+}
+
+.home {
+  background-color: #92d051;
+  color: white;
+}
+
+.logout-link:hover,
+.home:hover {
+  background-color: #5b9bd5;
+}
+
+.main-content {
     padding: 20px;
 }
 
@@ -59,11 +81,11 @@ main {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 20px;
     padding: 20px;
-    background-color: #fff;
+    background-color: #16213e;
 }
 
 .series-card {
-    background-color: white;
+    background-color: #16213e;    
     padding: 10px;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -83,7 +105,7 @@ main {
 .series-card h3 {
     margin: 0;
     font-size: 1em;
-    color: #333;
+    color: white;
 }
 .series-link {
     text-decoration: none;
@@ -97,5 +119,4 @@ main {
 
 .series-card {
     cursor: pointer;
-    /* bestaande styling hier */
 }

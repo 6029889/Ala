@@ -83,7 +83,7 @@ header {
   padding: 0 20px;
   box-sizing: border-box;
   z-index: 2;
-  background-color: #1a1a2e; /* Ensure header has background color */
+  background-color: #1a1a2e;
 }
 
 .header-left img {
@@ -106,7 +106,7 @@ header {
 }
 
 .series-container-wrapper:first-of-type {
-  margin-top: 100px; /* Adjust this value as needed to create space below the header */
+  margin-top: 100px;
 }
 
 .series-container-wrapper::-webkit-scrollbar {
