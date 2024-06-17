@@ -8,13 +8,12 @@ function displaySeries($searchTerm = "") {
         die("Kan geen verbinding maken met de database: " . $conn->connect_error);
     }
 
-    // Query om alle actieve series op te halen
+    
     $sql = "SELECT SerieID, SerieTitel, IMDBLink FROM serie WHERE Actief = 1";
     if (!empty($searchTerm)) {
         $sql .= " AND SerieTitel LIKE ?";
     }
-    $sql .= " LIMIT 50"; // Limiteer het aantal resultaten om performance te verbeteren
-
+    $sql .= " LIMIT 50"; 
     $stmt = $conn->prepare($sql);
 
     if (!empty($searchTerm)) {

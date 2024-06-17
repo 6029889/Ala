@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
     } else {
         $conn = connect_to_database();
 
-        // Check if email already exists
+
         $stmt = $conn->prepare("SELECT KlantNr FROM klant WHERE Email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -25,13 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
         if ($stmt->num_rows > 0) {
             $registerError = "E-mailadres is al in gebruik.";
         } else {
-            // Hash the password
+      
             $hashedPassword = password_hash($wachtwoord, PASSWORD_DEFAULT);
 
-            // Default value for AboID is set to 1
-            $aboID = 1;
+        
             $genrefavoriet = "Science Ficton";
-            // Insert the new user with default AboID
             $stmt = $conn->prepare("INSERT INTO klant (Voornaam, Tussenvoegsel, Achternaam, Email, Password, AboID, Genre) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("ssssssi", $gebruikersnaam, $tussenvoegsel, $achternaam, $email, $hashedPassword, $aboID, $genrefavoriet);
 
@@ -65,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
             <img src="images/HOBO_logo.png" alt="">
         </div>
         <div class="header-right">
-            <a href="login.php">Log In</a>
+            <a href="index.php">Log In</a>
         </div>
     </header>
     <div>

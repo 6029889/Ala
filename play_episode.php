@@ -41,7 +41,7 @@ if ($result->num_rows > 0) {
 
 $stmt->close();
 
-// Functie om gegevens in te voegen in de stream tabel
+
 function insertintoStream($klantID, $AflID, $d_start)
 {
     global $conn;
@@ -52,15 +52,14 @@ function insertintoStream($klantID, $AflID, $d_start)
     $stmt->close();
 }
 
-// Controleer of de gebruiker geen admin is voordat de functie wordt aangeroepen
+
 if (!isset($_SESSION['userType']) || $_SESSION['userType'] !== 'admin') {
     insertintoStream($klantID, $episodeID, date("Y-m-d H:i:s"));
 }
 
-// Voorbeeld URL naar de video - vervang dit met de daadwerkelijke URL naar je video
 $video_url = "path_to_your_video.mp4";
 
-// Voorbeeld serie en acteursgegevens
+
 $series = [
     'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
 ];

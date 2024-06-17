@@ -8,21 +8,20 @@ if (!isset($_SESSION['KlantNr']) && !isset($_SESSION['id'])) {
 }
 
 
-// Check if SerieID is set
+
 if (!isset($_GET['serie_id'])) {
     die("SerieID is niet ingesteld.");
 }
 
 $serieID = $_GET['serie_id'];
 
-// Connect to the database
 $conn = connect_to_database();
 
 if ($conn->connect_error) {
     die("Kan geen verbinding maken met de database: " . $conn->connect_error);
 }
 
-// Fetch seasons and episodes for the given SerieID
+
 $seasons_query = "
     SELECT s.SeizoenID, s.Rang, s.Jaar, s.IMDBRating, a.AfleveringID, a.AflTitel, a.Duur 
     FROM seizoen s 
