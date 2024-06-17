@@ -74,6 +74,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 </header>
 <div>
 <?php
+function getLastWatchedSeries($klantNr) {
+    $conn = connect_to_database();
+    $sql = "
+        SELECT serie.SerieID, serie.SerieTitel, MAX(s.d_start) as LastWatched
+        FROM stream s
+        INNER JOIN aflevering a ON s.AflID = a.AfleveringID
+        INNER JOIN seizoen se ON a.SeizID = se.SeizoenID
+        INNER JOIN serie ON se.SerieID = serie.SerieID
+        WHERE s.klantID = ?
+        GROUP BY serie.SerieID, serie.SerieTitel
+        ORDER BY LastWatched DESC
+    ";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $klantNr);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $series = [];
+    while ($row = $result->fetch_assoc()) {
+        $series[] = $row;
+    }
+
+    $stmt->close();
+    $conn->close();
+    
+    return $series;
+}
 function displaySeries($searchTerm = "") {
     $conn = connect_to_database();
 
@@ -81,7 +108,7 @@ function displaySeries($searchTerm = "") {
         die("Kan geen verbinding maken met de database: " . $conn->connect_error);
     }
 
-    // Haal alle unieke genres op
+ 
     $genres_query = "SELECT DISTINCT Genre.GenreID, Genre.GenreNaam FROM Genre INNER JOIN serie_genre ON Genre.GenreID = serie_genre.GenreID INNER JOIN serie ON serie.SerieID = serie_genre.SerieID WHERE serie.Actief = 1";
     $genres_result = $conn->query($genres_query);
 
@@ -90,7 +117,6 @@ function displaySeries($searchTerm = "") {
             $genreID = $genre_row['GenreID'];
             $genreNaam = $genre_row['GenreNaam'];
 
-            // Query om series per genre op te halen
             $sql = "SELECT serie.SerieID, serie.SerieTitel, serie.IMDBLink FROM serie INNER JOIN serie_genre ON serie.SerieID = serie_genre.SerieID WHERE serie_genre.GenreID = ? AND serie.Actief = 1";
             if (!empty($searchTerm)) {
                 $sql .= " AND serie.SerieTitel LIKE ?";
@@ -152,7 +178,8 @@ function displaySeries($searchTerm = "") {
 }
 
 
-    displaySeries();
+
+  
 $series = [
     'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
     'TrailerURL' => 'https://www.youtube.com/embed/HhesaQXLuRY',
@@ -171,6 +198,44 @@ $actors = [
 ];
 
 ?>
+<?php
+if (isset($_SESSION['KlantNr'])) {
+    $klantNr = $_SESSION['KlantNr'];
+    $lastWatchedSeries = getLastWatchedSeries($klantNr);
+
+    if (!empty($lastWatchedSeries)) {
+        echo "<div class='series-container-wrapper'>";
+        echo "<h2>Laatst Bekeken Series</h2>";
+        echo "<div class='series-container' id='last-watched-series-container'>";
+        
+        $numSeries = count($lastWatchedSeries);
+        
+        if ($numSeries >= 9) {
+            echo "<button class='scrollLeftButton' data-container-id='last-watched-series-container'><i class='fas fa-angle-left'></i></button>";
+        }
+        
+        foreach ($lastWatchedSeries as $series) {
+            $serieIDWithoutZeroes = sprintf('%05d', $series['SerieID']);
+            $imagePath = "images/images/fotos/" . $serieIDWithoutZeroes . ".jpg";
+            echo "<div class='series-card' data-serie-id='" . $series['SerieID'] . "' style='text-decoration: none; color: inherit; cursor: pointer;'>";
+            if (file_exists($imagePath)) {
+                echo "<img src='" . $imagePath . "' alt='" . $series['SerieTitel'] . "' style='max-width: 100px; margin-bottom: 10px;'>";
+            }
+            echo "<h3>" . $series['SerieTitel'] . "</h3>";
+            echo "</div>";
+        }
+        
+        if ($numSeries >= 9) {
+            echo "<button class='scrollRightButton' data-container-id='last-watched-series-container'><i class='fas fa-angle-right'></i></button>";
+        }
+        
+        echo "</div>";
+        echo "</div>";
+    }
+}
+displaySeries();
+?>
+
 </div>
 
 <div id="info-container">
