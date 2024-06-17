@@ -109,7 +109,7 @@ $actors = [
     <h2>Series Beschrijving</h2>
     <p><?php echo htmlspecialchars($series['SerieBeschrijving']); ?></p>
     <div class="actors">
-        <h3>Met:</h3>
+        <h3>Acteurs:</h3>
         <ul>
             <?php foreach ($actors as $actor): ?>
                 <li><?php echo htmlspecialchars($actor); ?></li>
