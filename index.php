@@ -215,6 +215,26 @@ $actors = [
 ];
 
 ?>
+<div id="info-container">
+    <h1><?php echo htmlspecialchars($series['SerieTitel'] ?? ''); ?></h1>
+    <p><?php echo htmlspecialchars($series['SerieBeschrijving'] ?? ''); ?></p>
+    <?php if (!empty($series['TrailerURL'])): ?>
+        <div class="trailer">
+            <h2>Trailer</h2>
+            <iframe width="200" height="100" src="<?php echo htmlspecialchars($series['TrailerURL']); ?>" frameborder="0" allowfullscreen></iframe>
+        </div>
+    <?php endif; ?>
+    <div class="actors">
+        <h2>Actors</h2>
+        <ul>
+            <?php foreach ($actors as $actor): ?>
+                <li><?php echo htmlspecialchars($actor); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+   <button id="watch-video-button">Bekijk serie</button>
+    <button id="less-button">Minder weergeven</button>
+</div>
 <?php
 if (isset($_SESSION['KlantNr'])) {
     $klantNr = $_SESSION['KlantNr'];
@@ -242,26 +262,7 @@ displaySeries();
 ?>
 </div>
 
-<div id="info-container">
-    <h1><?php echo htmlspecialchars($series['SerieTitel'] ?? ''); ?></h1>
-    <p><?php echo htmlspecialchars($series['SerieBeschrijving'] ?? ''); ?></p>
-    <?php if (!empty($series['TrailerURL'])): ?>
-        <div class="trailer">
-            <h2>Trailer</h2>
-            <iframe width="200" height="100" src="<?php echo htmlspecialchars($series['TrailerURL']); ?>" frameborder="0" allowfullscreen></iframe>
-        </div>
-    <?php endif; ?>
-    <div class="actors">
-        <h2>Actors</h2>
-        <ul>
-            <?php foreach ($actors as $actor): ?>
-                <li><?php echo htmlspecialchars($actor); ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-   <button id="watch-video-button">Bekijk serie</button>
-    <button id="less-button">Minder weergeven</button>
-</div>
+
 
 
 
