@@ -365,8 +365,9 @@ displaySeries();
         </form>
         <div class="popular-series-container">
             <h2>Populaire Series</h2>
+            <button class="scrollLeftButton" id="popularScrollLeft"><i class="fas fa-angle-left"></i></button>
             <div class="popular-series-slideshow">
-                <?php $popularSeries = getPopularseries()?>
+                <?php $popularSeries = getPopularSeries(); ?>
                 <?php foreach ($popularSeries as $series): ?>
                     <?php $serieIDWithoutZeroes = sprintf('%05d', $series['SerieID']); ?>
                     <div class="popular-series-slide">
@@ -375,22 +376,29 @@ displaySeries();
                     </div>
                 <?php endforeach; ?>
             </div>
-            <button class="scrollLeftButton" id="popularScrollLeft"><i class="fas fa-angle-left"></i></button>
             <button class="scrollRightButton" id="popularScrollRight"><i class="fas fa-angle-right"></i></button>
         </div>
     </div>
 </div>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
     const popularSeriesContainer = document.querySelector('.popular-series-slideshow');
     const scrollAmount = 200;
 
-    document.getElementById('popularScrollLeft').addEventListener('click', () => {
-        popularSeriesContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    document.getElementById('popularScrollLeft').addEventListener('click', function() {
+        popularSeriesContainer.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
     });
 
-    document.getElementById('popularScrollRight').addEventListener('click', () => {
-        popularSeriesContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    document.getElementById('popularScrollRight').addEventListener('click', function() {
+        popularSeriesContainer.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
     });
+});
 </script>
 </body>
 </html>

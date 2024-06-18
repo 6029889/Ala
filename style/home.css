@@ -317,7 +317,7 @@ header {
 
 .scrollLeftButton,
 .scrollRightButton {
-  position: absolute;
+  position: sticky;
   top: 50%;
   transform: translateY(-50%);
   background-color: #92d051;
