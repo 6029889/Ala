@@ -138,7 +138,6 @@ header {
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-
 .series-card:hover {
   transform: translateY(-10px);
   box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
@@ -264,4 +263,84 @@ header {
 
 .profile-link:hover {
   background-color: #5b9bd5;
+}
+
+.popular-series-container {
+  margin-top: 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.popular-series-container h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.popular-series-slideshow {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  background-color: #16213e;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.popular-series-slide {
+  display: inline-block;
+  background-color: #0f3460;
+  border-radius: 10px;
+  margin: 0 5px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.popular-series-slide:hover {
+  transform: translateY(-10px);
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.popular-series-slide img {
+  width: 50px;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.popular-series-slide h3 {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.scrollLeftButton,
+.scrollRightButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #92d051;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  z-index: 1;
+}
+
+.scrollLeftButton:hover,
+.scrollRightButton:hover {
+  background-color: #5b9bd5;
+}
+
+.scrollLeftButton {
+  left: 10px;
+}
+
+.scrollRightButton {
+  right: 10px;
 }

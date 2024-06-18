@@ -40,7 +40,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $stmt->close();
     $conn->close();
 }
-
+function getPopularseries(){
+    $conn = connect_to_database();
+    $sql = "SELECT SerieID, SerieTitel from serie where actief = 1 order by RAND() limit 5";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $series = [];
+    while ($row = $result->fetch_assoc()) {
+        $series[] = $row;
+    }
+    $stmt->close();
+    $conn->close();
+    return $series;
+}
 
 ?>
 
@@ -67,10 +80,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                 <input type="text" id="searchTerm" name="searchTerm" required>
                 <a href="search.php"><img src="images/search.png" alt="" class="search" id="searchIcon"></a>
             </div>
+            
         </form>
         <a href="logout.php" class="logout-link">Uitloggen</a>
         <a href="profiel.php" class="profile-link">Profiel</a>
     </div>
+    
 </header>
 <div>
 <?php
@@ -101,6 +116,7 @@ function getLastWatchedSeries($klantNr) {
     
     return $series;
 }
+
 function displaySeries($searchTerm = "") {
     $conn = connect_to_database();
 
@@ -347,8 +363,35 @@ displaySeries();
 
             <input type="submit" name="login" value="Log In">
         </form>
+        <div class="popular-series-container">
+            <h2>Populaire Series</h2>
+            <div class="popular-series-slideshow">
+                <?php $popularSeries = getPopularseries()?>
+                <?php foreach ($popularSeries as $series): ?>
+                    <?php $serieIDWithoutZeroes = sprintf('%05d', $series['SerieID']); ?>
+                    <div class="popular-series-slide">
+                        <img src="images/images/fotos/<?php echo $serieIDWithoutZeroes; ?>.jpg" alt="<?php echo htmlspecialchars($series['SerieTitel']); ?>">
+                        <h3><?php echo htmlspecialchars($series['SerieTitel']); ?></h3>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <button class="scrollLeftButton" id="popularScrollLeft"><i class="fas fa-angle-left"></i></button>
+            <button class="scrollRightButton" id="popularScrollRight"><i class="fas fa-angle-right"></i></button>
+        </div>
     </div>
 </div>
+<script>
+    const popularSeriesContainer = document.querySelector('.popular-series-slideshow');
+    const scrollAmount = 200;
+
+    document.getElementById('popularScrollLeft').addEventListener('click', () => {
+        popularSeriesContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    document.getElementById('popularScrollRight').addEventListener('click', () => {
+        popularSeriesContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+</script>
 </body>
 </html>
 <?php endif; ?>
