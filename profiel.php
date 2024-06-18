@@ -173,7 +173,19 @@ function getTodayWatchTime($klantNr) {
     
     return $watchTime;
 }
+function deleteWatchHistory($klantNr) {
+    $conn = connect_to_database();
+    $stmt = $conn->prepare("DELETE FROM stream WHERE klantID = ?");
+    $stmt->bind_param("i", $klantNr);
+    $stmt->execute();
 
+    $success = $stmt->affected_rows > 0;
+
+    $stmt->close();
+    $conn->close();
+    
+    return $success;
+}
 ?>
 
 <!DOCTYPE html>
@@ -272,14 +284,29 @@ function getTodayWatchTime($klantNr) {
           
             <div class="watch-history">
                 <h2>Kijkgeschiedenis</h2>
+                
                 <ul>
                     <?php if (!empty($watchHistory)): ?>
+                        <form method="post" action="">
+                                    <p>
+                                        <input type="submit" name="clear-history" value="Wis kijkgeschiedenis">
+                                    </p>
+                                </form>
+                                <?php
+                                if (isset($_POST['clear-history'])) {
+                                    $success = deleteWatchHistory($klantNr);
+                                    if ($success) {
+                                        $watchHistory = [];
+                                    }
+                                }
+                                ?>
                         <?php foreach ($watchHistory as $entry): ?>
                             <li>
                                 <strong><?php echo htmlspecialchars($entry['SerieTitel']); ?></strong>: 
                                 <?php echo htmlspecialchars($entry['AflTitel']); ?> 
-                                (Gestart op: <?php echo htmlspecialchars($entry['d_start']); ?>)
-                                (Beëindigd op: <?php echo htmlspecialchars($entry['d_eind']); ?>
+                                <p>Gestart op:</p> <?php echo htmlspecialchars($entry['d_start']); ?>
+                                <p>Beëindigd op:</p> <?php echo htmlspecialchars($entry['d_eind']); ?>
+                          
                             </li>
                         <?php endforeach; ?>
                     <?php else: ?>
