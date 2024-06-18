@@ -84,7 +84,7 @@ $conn->close();
                     <?php foreach ($season['episodes'] as $episode): ?>
                         <li>
                             <a href="play_episode.php?serie_id=<?php echo $serieID; ?>&episode_id=<?php echo $episode['AfleveringID']?>">
-                                <?php echo $episode['AflTitel']; ?> - <?php echo $episode['Duur']; ?>
+                                <?php echo $episode['AflTitel']; ?> - <?php echo "Duur" . $episode['Duur']; ?>
                             </a>
                         </li>
                     <?php endforeach; ?>
