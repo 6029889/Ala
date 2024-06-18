@@ -3,7 +3,25 @@ include 'connect.php';
 
 session_start();
 
-function getAllSeries() {
+function getAlluserdata($page, $itemsPerPage){
+    $conn = connect_to_database();
+    $stmt = $conn->prepare("SELECT klantnr, voornaam, tussenvoegsel, achternaam, email, genre FROM klant");
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $userData = [];
+    while ($row = $result->fetch_assoc()) {
+        $userData[] = $row;
+    }
+
+    $stmt->close();
+    $conn->close();
+    
+    return $userData;
+
+}
+
+function getAllSeries($page, $itemsPerPage) {
     $conn = connect_to_database();
     $stmt = $conn->prepare("SELECT SerieID, SerieTitel, Actief FROM serie");
     $stmt->execute();
@@ -19,19 +37,38 @@ function getAllSeries() {
     
     return $series;
 }
-
-function updateSeriesStatus($serieID, $isActief) {
+function countAllSeries() {
     $conn = connect_to_database();
-    $stmt = $conn->prepare("UPDATE serie SET Actief = ? WHERE SerieID = ?");
-    $stmt->bind_param("ii", $isActief, $serieID);
+    $stmt = $conn->prepare("SELECT COUNT(*) as total FROM serie");
     $stmt->execute();
-
-    $success = $stmt->affected_rows > 0;
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $total = $row['total'];
 
     $stmt->close();
     $conn->close();
     
-    return $success;
+    return $total;
+}
+
+
+function countAllUsers(){
+    $conn = connect_to_database();
+    $stmt = $conn->prepare("SELECT COUNT(*) as total FROM klant");
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $total = 0;
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $total = $row['total'];
+    }
+
+    $stmt->close();
+    $conn->close();
+    
+    return $total;
+
 }
 
 function getUserData($klantNr) {
@@ -112,7 +149,8 @@ function getWatchHistory($klantNr) {
 }
 
 $klantNr = isset($_SESSION['KlantNr']) ? $_SESSION['KlantNr'] : null;
-$isAdmin = isset($_SESSION['userType']) && $_SESSION['userType'] == 'content';
+$isContentmanager = isset($_SESSION['userType']) && $_SESSION['userType'] == 'content';
+$isAdmin = isset($_SESSION['userType']) && $_SESSION['userType'] == 'admin';
 
 
 
@@ -125,9 +163,20 @@ if ($klantNr !== null) {
     $todayWatchTime = getTodayWatchTime($klantNr);
 }
 
-if ($isAdmin) {
-    $allSeries = getAllSeries();
+$itemsPerPage = 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$totalSeries = countAllSeries();
+$totalUsers = countAllUsers();
+$totalPagesSeries = ceil($totalSeries / $itemsPerPage);
+$totalPagesUsers = ceil($totalUsers / $itemsPerPage);
+
+if ($isContentmanager) {
+    $allSeries = getAllSeries($page, $itemsPerPage);
 }
+if ($isAdmin) {
+    $userData = getAllUserData($page, $itemsPerPage);
+}
+
 
 if (isset($_POST['submit'])) {
     $voornaam = $_POST['voornaam'];
@@ -143,14 +192,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-if (isset($_POST['updateSeries'])) {
-    foreach ($_POST['series'] as $serieID => $isActief) {
-        $isActief = $isActief == '1' ? 1 : 0;
-        updateSeriesStatus($serieID, $isActief);
-    }
-    
-    $allSeries = getAllSeries();
-}
 function getTodayWatchTime($klantNr) {
     $conn = connect_to_database();
     $stmt = $conn->prepare("
@@ -267,7 +308,7 @@ function deleteWatchHistory($klantNr) {
         </div>  <?php var_dump($_SESSION)?> 
     </header>
     <div class="profile-container">
-        <?php if ($userData): ?>
+        <?php if ($klantNr): ?>
             <h1>Profiel</h1>
             <form method="post" action="">
                 <p>
@@ -342,25 +383,48 @@ function deleteWatchHistory($klantNr) {
                 </p>
             </div>
         <?php endif; ?>
-           
-            <?php if ($isAdmin): ?>
-            <div class="series-management">
-                <h2>Series Beheer</h2>
-                <form method="post" action="">
-                    <ul>
-                        <?php foreach ($allSeries as $serie): ?>
-                            <li>
-                                <label>
-                                    <input type="checkbox" name="series[<?php echo $serie['SerieID']; ?>]" value="1" <?php if ($serie['Actief']) echo 'checked'; ?>>
-                                    <?php echo htmlspecialchars($serie['SerieTitel']); ?>
-                                </label>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                    <p><input type="submit" name="updateSeries" value="Bijwerken"></p>
-                </form>
+        <div class="pagination">
+    <?php if ($isContentmanager): ?>
+        <h2>Series Beheer</h2>
+        <form method="post" action="">
+            <ul>
+                <?php foreach ($allSeries as $serie): ?>
+                    <li>
+                        <label>
+                            <?php echo htmlspecialchars($serie['SerieTitel']); ?>
+                            <a href="serieedit.php?serie_id=<?php echo $serie['SerieID']; ?>">Bewerk</a>
+                        </label>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <div class="pagination">
+                <?php for ($i = 1; $i <= $totalPagesSeries; $i++): ?>
+                    <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                <?php endfor; ?>
             </div>
-            <?php endif; ?>
+        </form>
+    <?php endif; ?>
+
+    <?php if ($isAdmin): ?>
+        <h2>Gebruikers</h2>
+        <ul>
+            <?php foreach ($userData as $user): ?>
+                <li>
+                    <strong><?php echo htmlspecialchars($user['voornaam']); ?></strong>
+                    <p><?php echo htmlspecialchars($user['tussenvoegsel']); ?></p>
+                    <p><?php echo htmlspecialchars($user['achternaam']); ?></p>
+                    <p><?php echo htmlspecialchars($user['email']); ?></p>
+                    <p><?php echo htmlspecialchars($user['genre']); ?></p>
+                    <a href="useredit.php?user_id=<?php echo $user['klantnr']; ?>">Bewerk</a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <div class="pagination">
+            <?php for ($i = 1; $i <= $totalPagesUsers; $i++): ?>
+                <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+            <?php endfor; ?>
+        </div>
+    <?php endif; ?>
 
 
        
