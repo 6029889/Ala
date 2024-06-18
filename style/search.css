@@ -12,6 +12,7 @@ header {
     padding: 10px 20px;
     background-color: #333;
     color: white;
+    flex-wrap: wrap;
 }
 
 .header-left img {
@@ -28,6 +29,7 @@ header {
 .header-right form {
     display: flex;
     align-items: center;
+    margin-top: 10px;
 }
 
 .header-right input[type="text"] {
@@ -107,6 +109,7 @@ header {
     font-size: 1em;
     color: white;
 }
+
 .series-link {
     text-decoration: none;
     color: inherit;
@@ -119,4 +122,83 @@ header {
 
 .series-card {
     cursor: pointer;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .header-left a {
+        margin-left: 10px;
+        font-size: 1em;
+    }
+    
+    .header-right form {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-right input[type="text"],
+    .header-right button {
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+
+    .header-right button {
+        padding: 5px;
+    }
+
+    .series-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .series-card img {
+        max-width: 80px;
+    }
+
+    .series-card h3 {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-left,
+    .header-right {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-right form {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-right input[type="text"],
+    .header-right button {
+        width: 100%;
+        font-size: 0.8em;
+        margin-top: 5px;
+    }
+
+    .header-right button {
+        padding: 5px;
+    }
+
+    .series-container {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .series-card img {
+        max-width: 60px;
+    }
+
+    .series-card h3 {
+        font-size: 0.8em;
+    }
 }
