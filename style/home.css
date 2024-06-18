@@ -344,3 +344,43 @@ header {
 .scrollRightButton {
   right: 10px;
 }
+
+@media (max-width: 768px) {
+  .header-left img {
+    max-width: 100px;
+  }
+
+  .header-right .search {
+    max-width: 40px;
+    height: 30px;
+  }
+
+  .logout-link,
+  .home,
+  .profile-link {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+
+  .series-card {
+    width: 120px;
+    padding: 5px;
+  }
+
+  .series-card img {
+    max-width: 80px;
+  }
+
+  .popular-series-slide img {
+    width: 40px;
+  }
+
+  .popular-series-slide h3 {
+    font-size: 12px;
+  }
+
+  #info-container {
+    width: 90%;
+    padding: 10px;
+  }
+}
