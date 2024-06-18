@@ -3,9 +3,11 @@ include 'connect.php';
 
 session_start();
 
-function getAlluserdata($page, $itemsPerPage){
+function getAllUserData($page, $itemsPerPage) {
     $conn = connect_to_database();
-    $stmt = $conn->prepare("SELECT klantnr, voornaam, tussenvoegsel, achternaam, email, genre FROM klant");
+    $offset = ($page - 1) * $itemsPerPage;
+    $stmt = $conn->prepare("SELECT klantnr, voornaam, tussenvoegsel, achternaam, email, genre FROM klant LIMIT ?, ?");
+    $stmt->bind_param("ii", $offset, $itemsPerPage);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -18,12 +20,13 @@ function getAlluserdata($page, $itemsPerPage){
     $conn->close();
     
     return $userData;
-
 }
 
 function getAllSeries($page, $itemsPerPage) {
     $conn = connect_to_database();
-    $stmt = $conn->prepare("SELECT SerieID, SerieTitel, Actief FROM serie");
+    $offset = ($page - 1) * $itemsPerPage;
+    $stmt = $conn->prepare("SELECT SerieID, SerieTitel, Actief FROM serie LIMIT ?, ?");
+    $stmt->bind_param("ii", $offset, $itemsPerPage);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -37,6 +40,7 @@ function getAllSeries($page, $itemsPerPage) {
     
     return $series;
 }
+
 function countAllSeries() {
     $conn = connect_to_database();
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM serie");
@@ -305,7 +309,7 @@ function deleteWatchHistory($klantNr) {
         <div class="header-left">
             <img src="images/HOBO_logo.png" alt="Logo">
             <a href="index.php" class="home">Home</a>
-        </div>  <?php var_dump($_SESSION)?> 
+        </div>
     </header>
     <div class="profile-container">
         <?php if ($klantNr): ?>
