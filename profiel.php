@@ -112,7 +112,7 @@ function getWatchHistory($klantNr) {
 }
 
 $klantNr = isset($_SESSION['KlantNr']) ? $_SESSION['KlantNr'] : null;
-$isAdmin = isset($_SESSION['userType']) && $_SESSION['userType'] == 'admin';
+$isAdmin = isset($_SESSION['userType']) && $_SESSION['userType'] == 'content';
 
 
 
@@ -264,7 +264,7 @@ function deleteWatchHistory($klantNr) {
         <div class="header-left">
             <img src="images/HOBO_logo.png" alt="Logo">
             <a href="index.php" class="home">Home</a>
-        </div>
+        </div>  <?php var_dump($_SESSION)?> 
     </header>
     <div class="profile-container">
         <?php if ($userData): ?>

@@ -19,19 +19,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         $stmt->bind_result($klantNr);
         $stmt->fetch();
         $_SESSION['KlantNr'] = $klantNr;
-        $_SESSION['userType'] = 'klant';
+        
     } else {
        
-        $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? AND password = ?");
+        $stmt = $conn->prepare("SELECT id, userType FROM users WHERE email = ? AND password = ?");
         $stmt->bind_param("ss", $gebruikersnaam, $wachtwoord);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows == 1) {
-            $stmt->bind_result($userID);
+            $stmt->bind_result($userID, $userType);
             $stmt->fetch();
             $_SESSION['id'] = $userID;
-            $_SESSION['userType'] = 'admin';
+            $_SESSION['userType'] = $userType;
         } else {
             $loginError = "Ongeldige gebruikersnaam of wachtwoord.";
         }
@@ -67,6 +67,7 @@ function getPopularseries(){
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Welkom op de startpagina</title>
+  
 </head>
 <body>
 <header>
