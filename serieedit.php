@@ -3,7 +3,7 @@ include 'connect.php';
 session_start();
 
 if (!isset($_SESSION['userType']) || $_SESSION['userType'] !== 'content') {
-    // Redirect non-content managers to home page
+
     header("Location: index.php");
     exit();
 }
@@ -44,17 +44,56 @@ function updateSerie($serieID, $serieTitel, $actief) {
 }
 function deleteSeries($serieID) {
     $conn = connect_to_database();
-    $stmt = $conn->prepare("DELETE FROM serie WHERE SerieID = ?");
-    $stmt->bind_param("i", $serieID);
-    $stmt->execute();
+    
+    // Begin transaction
+    $conn->begin_transaction();
 
-    $success = $stmt->affected_rows > 0;
+    try {
+        // Delete episodes
+        $stmt = $conn->prepare("
+            DELETE aflevering 
+            FROM aflevering 
+            INNER JOIN seizoen ON aflevering.SeizID = seizoen.SeizoenID 
+            WHERE seizoen.SerieID = ?
+        ");
+        $stmt->bind_param("i", $serieID);
+        $stmt->execute();
+        $stmt->close();
 
-    $stmt->close();
+        // Delete seasons
+        $stmt = $conn->prepare("DELETE FROM seizoen WHERE SerieID = ?");
+        $stmt->bind_param("i", $serieID);
+        $stmt->execute();
+        $stmt->close();
+
+        // Delete from serie_genre
+        $stmt = $conn->prepare("DELETE FROM serie_genre WHERE SerieID = ?");
+        $stmt->bind_param("i", $serieID);
+        $stmt->execute();
+        $stmt->close();
+
+        // Delete series
+        $stmt = $conn->prepare("DELETE FROM serie WHERE SerieID = ?");
+        $stmt->bind_param("i", $serieID);
+        $stmt->execute();
+
+        $success = $stmt->affected_rows > 0;
+
+        $stmt->close();
+
+        // Commit transaction
+        $conn->commit();
+    } catch (Exception $e) {
+        // Rollback transaction on error
+        $conn->rollback();
+        $success = false;
+    }
+
     $conn->close();
     
     return $success;
 }
+
 
 if ($serieID) {
     $serie = getSerieDetails($serieID);

@@ -391,6 +391,7 @@ function deleteWatchHistory($klantNr) {
     <?php if ($isContentmanager): ?>
         <h2>Series Beheer</h2>
         <form method="post" action="">
+            <a href="addseries.php">Serie toevoegen</a>
             <ul>
                 <?php foreach ($allSeries as $serie): ?>
                     <li>

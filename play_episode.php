@@ -53,7 +53,7 @@ function insertintoStream($klantID, $AflID, $d_start, $d_eind)
 }
 
 
-if (!isset($_SESSION['userType']) || $_SESSION['userType'] !== 'admin') {
+if (!isset($_SESSION['userType']) || ($_SESSION['userType'] !== 'admin' && $_SESSION['userType'] !== 'content')) {
     insertintoStream($klantID, $episodeID, date("Y-m-d H:i:s"), date("Y-m-d H:i:s", strtotime("+1 hour")));
 }
 
