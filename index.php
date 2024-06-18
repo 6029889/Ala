@@ -154,6 +154,7 @@ function displaySeries($searchTerm = "") {
             if ($result->num_rows > 0) {
                 echo "<div class='series-container-wrapper'>";
                 $numSeries = $result->num_rows;
+                
               
                 echo "<h2>$genreNaam</h2>";
 
