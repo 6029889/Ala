@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 }
 function getPopularseries(){
     $conn = connect_to_database();
-    $sql = "SELECT SerieID, SerieTitel from serie where actief = 1 order by RAND() limit 5";
+    $sql = "SELECT SerieID, SerieTitel from serie where actief = 1 order by RAND() limit 10";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
