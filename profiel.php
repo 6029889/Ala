@@ -244,6 +244,19 @@ function deleteWatchHistory($klantNr) {
         .series-management li {
             margin-bottom: 10px;
         }
+        .wissen{
+            display: inline-block;
+            margin-right: 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            background-color: #92d051;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -289,7 +302,7 @@ function deleteWatchHistory($klantNr) {
                     <?php if (!empty($watchHistory)): ?>
                         <form method="post" action="">
                                     <p>
-                                        <input type="submit" name="clear-history" value="Wis kijkgeschiedenis">
+                                        <input type="submit" name="clear-history" value="Wis kijkgeschiedenis" class="wissen">
                                     </p>
                                 </form>
                                 <?php
