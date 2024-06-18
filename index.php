@@ -201,6 +201,7 @@ function displaySeries($searchTerm = "") {
 $series = [
     'SerieBeschrijving' => 'A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family\'s future.',
     'TrailerURL' => 'https://www.youtube.com/embed/HhesaQXLuRY',
+   
 ];
 
 $actors = [
@@ -219,6 +220,8 @@ $actors = [
 <div id="info-container">
     <h1><?php echo htmlspecialchars($series['SerieTitel'] ?? ''); ?></h1>
     <p><?php echo htmlspecialchars($series['SerieBeschrijving'] ?? ''); ?></p>
+    <a href="https://www.imdb.com/title/tt0903747/">IMDB</a>
+    
     <?php if (!empty($series['TrailerURL'])): ?>
         <div class="trailer">
             <h2>Trailer</h2>

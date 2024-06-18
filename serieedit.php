@@ -42,6 +42,19 @@ function updateSerie($serieID, $serieTitel, $actief) {
     
     return $success;
 }
+function deleteSeries($serieID) {
+    $conn = connect_to_database();
+    $stmt = $conn->prepare("DELETE FROM serie WHERE SerieID = ?");
+    $stmt->bind_param("i", $serieID);
+    $stmt->execute();
+
+    $success = $stmt->affected_rows > 0;
+
+    $stmt->close();
+    $conn->close();
+    
+    return $success;
+}
 
 if ($serieID) {
     $serie = getSerieDetails($serieID);
@@ -57,6 +70,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     } else {
         $error = "Er is een fout opgetreden bij het bijwerken van de serie.";
+    }
+}
+if (isset($_POST['delete'])) {
+    $success = deleteSeries($serieID);
+
+    if ($success) {
+        header("Location: profiel.php");
+        exit();
+    } else {
+        $error = "Er is een fout opgetreden bij het verwijderen van de serie.";
     }
 }
 ?>
@@ -132,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </p>
                 <p>
                     <input type="submit" value="Opslaan">
+                    <input type="submit" name="delete" value="Delete" >
                 </p>
             </form>
         <?php else: ?>
